@@ -1,2 +1,3 @@
 # Learning
-Solving exercises from programming books
+
+Projects to explore different technologies and approaches.
