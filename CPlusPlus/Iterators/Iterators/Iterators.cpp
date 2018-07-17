@@ -5,7 +5,7 @@
 
 int main()
 {
-    use_count();
+    use_generate_and_count();
 
     int i = 0;
     cin >> i;

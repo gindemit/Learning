@@ -126,3 +126,30 @@ void use_count()
     // count of 1: 2
     // 1 2 3 4 5 6 7 8 9 10 1 2 3 4 5 6 7 8 9 10
 }
+
+void use_generate()
+{
+    ::std::srand(static_cast<unsigned int>(::std::time(0)));
+    vector<int> ints(20);
+    ::std::generate(ints.begin(), ints.end(), []() { return ::std::rand() % 20; });
+
+    ::std::copy(ints.cbegin(), ints.cend(), ::std::ostream_iterator<int>(cout, " "));
+
+    // Output:
+    // 10 7 5 11 13 14 14 7 8 7 13 9 3 12 19 6 1 14 15 11
+}
+
+void use_generate_and_count()
+{
+    ::std::srand(static_cast<unsigned int>(::std::time(0)));
+    vector<int> ints(20);
+    ::std::generate(ints.begin(), ints.end(), []() { return ::std::rand() % 20; });
+    ::std::copy(ints.cbegin(), ints.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+    int i = ::std::rand() % 20;
+    cout << "count of " << i << ": " << ::std::count(ints.begin(), ints.end(), i) << endl;
+
+    // Output:
+    // 11 1 15 18 19 3 17 14 17 9 5 7 0 0 16 13 10 7 1 2
+    // count of 5: 1
+}
