@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Diagnostics;
+using System.Collections.Generic;
+
+using ConsoleApp.SQLite;
 
 namespace DotNetCoreProject
 {
@@ -7,17 +11,33 @@ namespace DotNetCoreProject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Start stop watch...");
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            int test = 0;
-            for (int i = 0; i < 2000000000; i++)
+            using (var db = new BloggingContext())
             {
-                test++;
+                db.Blogs.Add(new Blog { Url = "http://blogs.msdn.com/adonet" });
+                var count = db.SaveChanges();
+                Console.WriteLine("{0} records saved to database", count);
+
+                Console.WriteLine();
+                Console.WriteLine("All blogs in database:");
+                foreach (var blog in db.Blogs)
+                {
+                    Console.WriteLine(" - {0}", blog.Url);
+                }
             }
 
-            Console.WriteLine("Elapsed: " + sw.ElapsedMilliseconds + ", " + test);
+            int[] numbers = new int[7] { 0, 1, 2, 3, 4, 5, 6 };
+
+            IEnumerable<int> query =
+                from num in numbers
+                where (num % 2) == 0
+                select num;
+
+            foreach (int num in query)
+            {
+                Console.Write("{0,1} ", num);
+            }
+
+
             Console.ReadKey();
         }
     }
