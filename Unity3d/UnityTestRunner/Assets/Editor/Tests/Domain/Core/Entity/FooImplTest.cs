@@ -1,11 +1,16 @@
 ﻿using NUnit.Framework;
 
-class FooImplTest
+namespace Domain.Core.Entity.Test
 {
-    [Test]
-    public void StateChanges()
+    class FooImplTest
     {
-        Assert.Equals(1, 1);
+        [Test]
+        public void StateChanges()
+        {
+
+            Foo foo = new FooImpl();
+
+            Assert.Equals(1, 1);
+        }
     }
 }
-
