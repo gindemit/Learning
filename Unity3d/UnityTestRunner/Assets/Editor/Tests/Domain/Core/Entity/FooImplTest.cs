@@ -7,10 +7,11 @@ namespace Domain.Core.Entity.Test
         [Test]
         public void StateChanges()
         {
-
             Foo foo = new FooImpl();
+            Assert.AreEqual(foo.GetCurrentState(), int.MinValue);
 
-            Assert.Equals(1, 1);
+            foo.ChangeInternalState();
+            Assert.Greater(foo.GetCurrentState(), int.MinValue);
         }
     }
 }
