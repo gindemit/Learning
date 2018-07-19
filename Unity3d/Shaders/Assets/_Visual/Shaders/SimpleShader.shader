@@ -9,22 +9,22 @@
     {
         Tags{ "RenderType" = "Lambert" }
         CGPROGRAM
-#pragma surface surf Lambert
+        #pragma surface surf Lambert
 
         struct Input
-    {
-        float4 color : COLOR;
-    };
-    float3 _Albedo;
-    float3 _Emission;
+        {
+            float4 color : COLOR;
+        };
+        float3 _Albedo;
+        float3 _Emission;
 
-    void surf(Input IN, inout SurfaceOutput o)
-    {
-        o.Albedo = _Albedo;
-        o.Emission = _Emission;
-    }
+        void surf(Input IN, inout SurfaceOutput o)
+        {
+            o.Albedo = _Albedo;
+            o.Emission = _Emission;
+        }
 
-    ENDCG
+        ENDCG
     }
         Fallback "Diffuse"
 }
