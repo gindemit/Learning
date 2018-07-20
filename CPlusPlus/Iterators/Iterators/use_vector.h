@@ -6,7 +6,8 @@
 #include <iterator>
 #include <ctime>
 #include <cstdlib>
-
+#include <cassert>
+#include <fstream>
 
 using ::std::vector;
 using ::std::cout;
@@ -152,4 +153,90 @@ void use_generate_and_count()
     // Output:
     // 11 1 15 18 19 3 17 14 17 9 5 7 0 0 16 13 10 7 1 2
     // count of 5: 1
+}
+
+void use_swap_iterators()
+{
+    vector<int> vector_one(20);
+    ::std::iota(vector_one.begin(), vector_one.end(), 1);
+
+    vector<int> vector_two(20);
+    ::std::iota(vector_two.rbegin(), vector_two.rend(), 1);
+
+    cout << "vector_one: ";
+    ::std::copy(vector_one.cbegin(), vector_one.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << "\nvector_two: ";
+    ::std::copy(vector_two.cbegin(), vector_two.cend(), ::std::ostream_iterator<int>(cout, " "));
+
+    ::std::iter_swap(vector_one.begin() + 3, vector_two.begin() + 7);
+
+    cout << "\nafter iter_swap\nvector_one: ";
+    ::std::copy(vector_one.cbegin(), vector_one.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << "\nvector_two: ";
+    ::std::copy(vector_two.cbegin(), vector_two.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+
+    // Output:
+    // vector_one: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+    // vector_two : 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
+    // after iter_swap
+    // vector_one : 1 2 3 13 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+    // vector_two : 20 19 18 17 16 15 14 4 12 11 10 9 8 7 6 5 4 3 2 1
+}
+
+void use_adjacent_find()
+{
+    vector<int> vi(20);
+    ::std::iota(vi.begin(), vi.end(), 1);
+
+    vector<int>::const_iterator it = ::std::adjacent_find(vi.cbegin(), vi.cend());
+    assert(it == vi.end());
+
+    ::std::replace(vi.begin(), vi.end(), 8, 7);
+    it = ::std::adjacent_find(vi.cbegin(), vi.cend());
+    assert(it != vi.end());
+    cout << "found adjacent iterator: " << *it << endl;
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+
+    // Output:
+    // found adjacent iterator: 7
+    // 1 2 3 4 5 6 7 7 9 10 11 12 13 14 15 16 17 18 19 20
+}
+
+void use_all_of()
+{
+    vector<int> vector_one(20, 9);
+    vector<int> vector_two(20);
+    ::std::iota(vector_two.begin(), vector_two.end(), 1);
+
+    cout << "all of vector_one are a multiple of three: " << ((::std::all_of(vector_one.cbegin(), vector_one.cend(), [](int item) { return item % 3 == 0; }) != 0) ? " yes!" : " no!") << endl;
+    cout << "all of vector_two are a multiple of three: " << ((::std::all_of(vector_two.cbegin(), vector_two.cend(), [](int item) { return item % 3 == 0; }) != 0) ? " yes!" : " no!") << endl;
+
+    // Output:
+    // all of vector_one are a multiple of three:  yes!
+    // all of vector_two are a multiple of three : no!
+}
+
+void use_binary_search()
+{
+    vector<int> vi(20);
+    ::std::iota(vi.begin(), vi.end(), 1);
+    cout << "vector has value '7': " << ((::std::binary_search(vi.cbegin(), vi.cend(), 7) != 0) ? " yes!" : " no!") << endl;
+
+    // Output:
+    // vector has value '7':  yes!
+}
+
+void use_copy_if()
+{
+    vector<int> vi(20);
+    ::std::iota(vi.begin(), vi.end(), 1);
+    ::std::copy_if(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "), [](int item) { return item % 2 == 0; });
+    cout << endl;
+
+    ::std::ofstream file("even_numbers.txt", ::std::ofstream::out);
+    ::std::copy_if(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(file, " "), [](int item) { return item % 2 == 0; });
+    file.close();
+    // Output:
+    // 2 4 6 8 10 12 14 16 18 20
 }

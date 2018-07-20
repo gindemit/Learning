@@ -5,6 +5,6 @@
 
 int main()
 {
-    use_generate_and_count();
+    use_copy_if();
     return 0;
 }
