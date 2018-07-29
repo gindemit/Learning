@@ -120,7 +120,7 @@ void use_count()
     vector<int> ints(20);
     ::std::iota(ints.begin(), ints.end() - ::std::distance(ints.cbegin(), ints.cend()) / 2, 1);
     ::std::iota(ints.end() - ::std::distance(ints.cbegin(), ints.cend()) / 2, ints.end(), 1);
-    cout << "count of 1: " << ::std::count(ints.cbegin(), ints.cend(), 1) << endl;    
+    cout << "count of 1: " << ::std::count(ints.cbegin(), ints.cend(), 1) << endl;
     ::std::copy(ints.cbegin(), ints.cend(), ::std::ostream_iterator<int>(cout, " "));
 
     // Output:
@@ -237,6 +237,44 @@ void use_copy_if()
     ::std::ofstream file("even_numbers.txt", ::std::ofstream::out);
     ::std::copy_if(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(file, " "), [](int item) { return item % 2 == 0; });
     file.close();
+
     // Output:
     // 2 4 6 8 10 12 14 16 18 20
+}
+
+void use_assign()
+{
+    vector<int> vi(20);
+    ::std::iota(vi.begin(), vi.end(), 1);
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+
+    int values[] = { 2,1,4,3,6,5,8,7,9 };
+    vi.assign(values, values + 9);
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+
+    // Output:
+    // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+    // 2 1 4 3 6 5 8 7 9
+}
+
+void use_make_heap()
+{
+    vector<int> vi(20);
+    ::std::iota(vi.begin(), vi.end(), 1);
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+    std::make_heap(vi.begin(), vi.end());
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+    ::std::iota(vi.rbegin(), vi.rend(), 1);
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+    std::make_heap(vi.begin(), vi.end());
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    cout << endl;
+
+    // Output:
+    // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+    // 20 19 15 18 11 13 14 17 9 10 2 12 6 3 7 16 8 4 1 5
 }

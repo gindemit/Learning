@@ -5,6 +5,6 @@
 
 int main()
 {
-    use_copy_if();
+    use_make_heap();
     return 0;
 }
