@@ -1,4 +1,5 @@
 #pragma once
+#include "iter_swap.h"
 
 // Example of work the bubble sort algorithm on vector<int> vi{3, 2, 1, 5, 4};
 //          3      2      1      5      4
@@ -32,9 +33,7 @@ void bubble_sort(Iterator begin, Iterator end)
         {
             if (*second > *first)
             {
-                typename Iterator::value_type temp = *first;
-                *first = *second;
-                *second = temp;
+                iter_swap(first, second);
             }
         }
     }
