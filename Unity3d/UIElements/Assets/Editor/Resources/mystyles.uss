@@ -1,0 +1,21 @@
+.horizontalContainer {
+    margin-left: 15;
+    margin-top: 50;
+    margin-right: 15;
+    margin-bottom: 15;
+    flex-direction: row;
+}
+
+#boxesContainer {
+    padding-left: 5;
+    padding-top: 5;
+    padding-right: 5;
+    padding-bottom: 5;
+    background-color: rgb(128, 128, 128);
+    align-self: center;
+}
+
+#boxesContainer > VisualElement {
+    width: 60;
+    height: 60;
+}
