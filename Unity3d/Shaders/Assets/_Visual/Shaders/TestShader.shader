@@ -3,6 +3,7 @@
     Properties
     {
         _Albedo("Albedo", Color) = (1,0,0,1)
+        _Texture("Texrure", 2D) = "white" {}
     }
     SubShader
     {
@@ -28,13 +29,16 @@
 
         struct Input
         {
+            float2 uv_Texture;
             float4 color : COLOR;
         };
 
         float4 _Albedo;
+        sampler2D _Texture;
 
         void surf(Input IN, inout SurfaceOutput o) {
-            o.Albedo = _Albedo;
+            float f = 1;
+            o.Albedo = tex2D(_Texture, IN.uv_Texture).rgb * _Albedo;
         }
 
         ENDCG
