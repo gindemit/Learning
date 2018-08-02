@@ -37,7 +37,6 @@
         sampler2D _Texture;
 
         void surf(Input IN, inout SurfaceOutput o) {
-            float f = 1;
             o.Albedo = tex2D(_Texture, IN.uv_Texture).rgb * _Albedo;
         }
 
