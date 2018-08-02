@@ -3,7 +3,27 @@
     margin-top: 50;
     margin-right: 15;
     margin-bottom: 15;
-    flex-direction: row;
+    flex-direction: row-reverse;
+}
+
+.testClass {
+	max-width: 80;
+    max-height: 80;
+	min-width: 60;
+    min-height: 60;
+	border-left:5;
+	border-right:5;
+	margin-left: 12;
+	margin-right: 12;
+	padding-left: 5;
+    padding-top: 5;
+    padding-right: 5;
+    padding-bottom: 5;
+}
+
+.draggablebox {
+	background-color : rgba(96, 80, 195, 0.8);
+	position-type: manual;
 }
 
 #boxesContainer {
@@ -11,11 +31,74 @@
     padding-top: 5;
     padding-right: 5;
     padding-bottom: 5;
-    background-color: rgb(128, 128, 128);
+    background-color: rgba(106, 90, 205, 0.8);
     align-self: center;
 }
 
 #boxesContainer > VisualElement {
-    width: 60;
-    height: 60;
+
 }
+
+/*
+{"width", StylePropertyID.Width},
+{"height", StylePropertyID.Height},
+{"max-width", StylePropertyID.MaxWidth},
+{"max-height", StylePropertyID.MaxHeight},
+{"min-width", StylePropertyID.MinWidth},
+{"min-height", StylePropertyID.MinHeight},
+{"flex", StylePropertyID.Flex},
+{"flex-wrap", StylePropertyID.FlexWrap},
+{"flex-basis", StylePropertyID.FlexBasis},
+{"flex-grow", StylePropertyID.FlexGrow},
+{"flex-shrink", StylePropertyID.FlexShrink},
+{"overflow", StylePropertyID.Overflow},
+{"position-left", StylePropertyID.PositionLeft},
+{"position-top", StylePropertyID.PositionTop},
+{"position-right", StylePropertyID.PositionRight},
+{"position-bottom", StylePropertyID.PositionBottom},
+{"margin-left", StylePropertyID.MarginLeft},
+{"margin-top", StylePropertyID.MarginTop},
+{"margin-right", StylePropertyID.MarginRight},
+{"margin-bottom", StylePropertyID.MarginBottom},
+{"border-left", StylePropertyID.BorderLeft},
+{"border-top", StylePropertyID.BorderTop},
+{"border-right", StylePropertyID.BorderRight},
+{"border-bottom", StylePropertyID.BorderBottom},
+{"padding-left", StylePropertyID.PaddingLeft},
+{"padding-top", StylePropertyID.PaddingTop},
+{"padding-right", StylePropertyID.PaddingRight},
+{"padding-bottom", StylePropertyID.PaddingBottom},
+{"position-type", StylePropertyID.PositionType},
+{"align-self", StylePropertyID.AlignSelf},
+{"text-alignment", StylePropertyID.TextAlignment},
+{"font-style", StylePropertyID.FontStyle},
+{"text-clipping", StylePropertyID.TextClipping},
+{"font", StylePropertyID.Font},
+{"font-size", StylePropertyID.FontSize},
+{"word-wrap", StylePropertyID.WordWrap},
+{"text-color", StylePropertyID.TextColor},
+{"flex-direction", StylePropertyID.FlexDirection},
+{"background-color", StylePropertyID.BackgroundColor},
+{"border-color", StylePropertyID.BorderColor},
+{"background-image", StylePropertyID.BackgroundImage},
+{"background-size", StylePropertyID.BackgroundSize},
+{"align-items", StylePropertyID.AlignItems},
+{"align-content", StylePropertyID.AlignContent},
+{"justify-content", StylePropertyID.JustifyContent},
+{"border-left-width", StylePropertyID.BorderLeftWidth},
+{"border-top-width", StylePropertyID.BorderTopWidth},
+{"border-right-width", StylePropertyID.BorderRightWidth},
+{"border-bottom-width", StylePropertyID.BorderBottomWidth},
+{"border-radius", StylePropertyID.BorderRadius},
+{"border-top-left-radius", StylePropertyID.BorderTopLeftRadius},
+{"border-top-right-radius", StylePropertyID.BorderTopRightRadius},
+{"border-bottom-right-radius", StylePropertyID.BorderBottomRightRadius},
+{"border-bottom-left-radius", StylePropertyID.BorderBottomLeftRadius},
+{"slice-left", StylePropertyID.SliceLeft},
+{"slice-top", StylePropertyID.SliceTop},
+{"slice-right", StylePropertyID.SliceRight},
+{"slice-bottom", StylePropertyID.SliceBottom},
+{"opacity", StylePropertyID.Opacity},
+{"cursor", StylePropertyID.Cursor},
+{"visibility", StylePropertyID.Visibility},
+*/
