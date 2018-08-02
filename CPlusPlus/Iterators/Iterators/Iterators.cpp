@@ -5,6 +5,6 @@
 
 int main()
 {
-    use_make_heap();
+    use_inserter();
     return 0;
 }

@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <fstream>
+#include <list>
 
 using ::std::vector;
 using ::std::cout;
@@ -277,4 +278,84 @@ void use_make_heap()
     // Output:
     // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
     // 20 19 15 18 11 13 14 17 9 10 2 12 6 3 7 16 8 4 1 5
+}
+
+void use_greather_and_less()
+{
+    ::std::srand(static_cast<unsigned int>(::std::time(nullptr)));
+    ::std::vector<int> vi(20);
+    ::std::generate(vi.begin(), vi.end(), []() { return ::std::rand() % 20; });
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    std::sort(vi.begin(), vi.end(), ::std::greater<int>());
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+
+    std::sort(vi.begin(), vi.end(), ::std::less<int>());
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    // Output:
+    // 18 15 13 7 13 4 13 11 7 7 9 16 15 6 1 1 16 17 16 16
+    // 18 17 16 16 16 16 15 15 13 13 13 11 9 7 7 7 6 4 1 1
+    // 1 1 4 6 7 7 7 9 11 13 13 13 15 15 16 16 16 16 17 18
+}
+
+void use_back_inserter()
+{
+    ::std::srand(static_cast<unsigned int>(::std::time(nullptr)));
+    ::std::vector<int> vi(20);
+    ::std::generate(vi.begin(), vi.end(), []() { return ::std::rand() % 20; });
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    ::std::vector<int> second;
+
+    ::std::copy_if(vi.cbegin(), vi.cend(), ::std::back_inserter(second), [](int item) { return item > 10; });
+    ::std::copy(second.cbegin(), second.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    // Output:
+    // 0 4 7 13 17 7 11 7 8 18 19 15 15 2 8 17 11 0 5 0
+    // 13 17 11 18 19 15 15 17 11
+}
+
+void use_front_inserter()
+{
+    ::std::srand(static_cast<unsigned int>(::std::time(nullptr)));
+    ::std::vector<int> vi(20);
+    ::std::generate(vi.begin(), vi.end(), []() { return ::std::rand() % 20; });
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    ::std::list<int> second; // supports push_front operation
+
+    ::std::copy_if(vi.cbegin(), vi.cend(), ::std::front_inserter(second), [](int item) { return item > 10; });
+    ::std::copy(second.cbegin(), second.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    // Output:
+    // 15 14 5 3 12 10 2 3 8 11 14 0 0 11 19 19 12 8 6 15
+    // 15 12 19 19 11 14 11 12 14 15
+}
+
+void use_inserter()
+{
+    ::std::srand(static_cast<unsigned int>(::std::time(nullptr)));
+    ::std::vector<int> vi(20);
+    ::std::generate(vi.begin(), vi.end(), []() { return ::std::rand() % 20; });
+    ::std::copy(vi.cbegin(), vi.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    ::std::vector<int> second;
+
+    ::std::copy_if(vi.cbegin(), vi.cend(), ::std::inserter(second, second.begin()), [](int item) { return item > 10; });
+    ::std::copy(second.cbegin(), second.cend(), ::std::ostream_iterator<int>(cout, " "));
+    ::std::cout << ::std::endl;
+
+    // Output:
+    // 9 7 12 11 14 5 0 17 16 16 18 6 10 2 13 13 18 18 9 6
+    // 12 11 14 17 16 16 18 13 13 18 18
 }
