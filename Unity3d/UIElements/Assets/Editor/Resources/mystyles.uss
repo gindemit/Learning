@@ -1,43 +1,23 @@
-.horizontalContainer {
-    margin-left: 15;
-    margin-top: 50;
-    margin-right: 15;
-    margin-bottom: 15;
-    flex-direction: row-reverse;
+.rootClass {
+	align-items : stretch;
+	align-content : stretch;
+	overflow : scroll;
 }
 
-.testClass {
-	max-width: 80;
-    max-height: 80;
-	min-width: 60;
-    min-height: 60;
-	border-left:5;
-	border-right:5;
-	margin-left: 12;
-	margin-right: 12;
-	padding-left: 5;
-    padding-top: 5;
-    padding-right: 5;
-    padding-bottom: 5;
+.workSpaceClass {
+	min-width: 600;
+    min-height: 600;
+	margin-top: 15;
+	margin-bottom: 15;
+	margin-left: 15;
+	margin-right: 15;
+	background-color : rgba(0, 0, 220, 0.1);
 }
 
-.draggablebox {
-	background-color : rgba(96, 80, 195, 0.8);
-	position-type: manual;
+.draggableBoxClass {
+	position-type : manual;
 }
 
-#boxesContainer {
-    padding-left: 5;
-    padding-top: 5;
-    padding-right: 5;
-    padding-bottom: 5;
-    background-color: rgba(106, 90, 205, 0.8);
-    align-self: center;
-}
-
-#boxesContainer > VisualElement {
-
-}
 
 /*
 {"width", StylePropertyID.Width},
@@ -46,12 +26,12 @@
 {"max-height", StylePropertyID.MaxHeight},
 {"min-width", StylePropertyID.MinWidth},
 {"min-height", StylePropertyID.MinHeight},
-{"flex", StylePropertyID.Flex},
-{"flex-wrap", StylePropertyID.FlexWrap},
-{"flex-basis", StylePropertyID.FlexBasis},
-{"flex-grow", StylePropertyID.FlexGrow},
-{"flex-shrink", StylePropertyID.FlexShrink},
-{"overflow", StylePropertyID.Overflow},
+{"flex", StylePropertyID.Flex},ApplyFloat
+{"flex-wrap", StylePropertyID.FlexWrap},NoWrap, Wrap
+{"flex-basis", StylePropertyID.FlexBasis},ApplyFloat
+{"flex-grow", StylePropertyID.FlexGrow},ApplyFloat
+{"flex-shrink", StylePropertyID.FlexShrink},ApplyFloat
+{"overflow", StylePropertyID.Overflow},Visible,Scroll,Hidden
 {"position-left", StylePropertyID.PositionLeft},
 {"position-top", StylePropertyID.PositionTop},
 {"position-right", StylePropertyID.PositionRight},
@@ -68,7 +48,7 @@
 {"padding-top", StylePropertyID.PaddingTop},
 {"padding-right", StylePropertyID.PaddingRight},
 {"padding-bottom", StylePropertyID.PaddingBottom},
-{"position-type", StylePropertyID.PositionType},
+{"position-type", StylePropertyID.PositionType},Relative,Absolute,Manual
 {"align-self", StylePropertyID.AlignSelf},
 {"text-alignment", StylePropertyID.TextAlignment},
 {"font-style", StylePropertyID.FontStyle},
@@ -77,13 +57,13 @@
 {"font-size", StylePropertyID.FontSize},
 {"word-wrap", StylePropertyID.WordWrap},
 {"text-color", StylePropertyID.TextColor},
-{"flex-direction", StylePropertyID.FlexDirection},
+{"flex-direction", StylePropertyID.FlexDirection},Column,ColumnReverse,Row,RowReverse
 {"background-color", StylePropertyID.BackgroundColor},
 {"border-color", StylePropertyID.BorderColor},
 {"background-image", StylePropertyID.BackgroundImage},
 {"background-size", StylePropertyID.BackgroundSize},
-{"align-items", StylePropertyID.AlignItems},
-{"align-content", StylePropertyID.AlignContent},
+{"align-items", StylePropertyID.AlignItems},Auto,FlexStart,Center,FlexEnd,Stretch
+{"align-content", StylePropertyID.AlignContent},Auto,FlexStart,Center,FlexEnd,Stretch
 {"justify-content", StylePropertyID.JustifyContent},
 {"border-left-width", StylePropertyID.BorderLeftWidth},
 {"border-top-width", StylePropertyID.BorderTopWidth},

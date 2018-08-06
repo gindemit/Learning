@@ -4,35 +4,57 @@ using UnityEngine;
 using UnityEngine.Experimental.UIElements;
 using UnityEditor.Experimental.UIElements;
 using UnityEditor.Experimental.UIElements.GraphView;
-using Object = UnityEngine.Object;
-using System.Collections.Generic;
 
 namespace UIElementsExamples
 {
-    public class CustomDragger : Dragger
+    public class WorkSpace : GraphView
     {
-        public CustomDragger()
+        private readonly RectangleSelector m_Selector = new RectangleSelector();
+        private readonly SelectionDragger m_SelectionDragger = new SelectionDragger();
+        public WorkSpace()
         {
+            AddToClassList("workSpaceClass");
+            SetupZoom(0.1f, 2f, 0.15f, 1f);
+            
+            this.AddManipulator(m_SelectionDragger);
+            this.AddManipulator(m_Selector);
         }
+
     }
 
-    public class DraggableBox : GraphView
+    public class PortDataOne { }
+    public class PortDataTwo { }
+    public class PortDataThree { }
+
+    public class DraggableBox : Node
     {
-        readonly Label m_Label;
-        private readonly CustomDragger m_Dragger;
         public DraggableBox()
         {
             SetSize(new Vector2(300, 300));
+            capabilities =
+                Capabilities.Selectable |
+                Capabilities.Collapsible |
+                Capabilities.Resizable |
+                Capabilities.Movable |
+                Capabilities.Deletable |
+                Capabilities.Droppable |
+                Capabilities.Ascendable;
 
-            m_Dragger = new CustomDragger { clampToParentEdges = false };
-            this.AddManipulator(m_Dragger);
+            title = "Floating Box";
+            AddToClassList("draggableBoxClass");
 
-            m_Label = new Label("Floating Box");
-            AddToClassList("draggablebox");
+            AddPorts(typeof(PortDataOne));
+            AddPorts(typeof(PortDataTwo));
+            AddPorts(typeof(PortDataThree));
+        }
 
-            Add(m_Label);
+        private void AddPorts(Type type)
+        {
+            inputContainer.Add(InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, type));
+            outputContainer.Add(InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, type));
         }
     }
+
 
 
 #if UNITY_2018
@@ -42,29 +64,27 @@ namespace UIElementsExamples
         public static void ShowExample()
         {
             var window = GetWindow<E08_EditorControls>();
-            window.minSize = new Vector2(1000, 320);
+            window.minSize = new Vector2(300, 300);
             window.titleContent = new GUIContent("Example 8");
         }
 
-        private VisualElement m_root;
+        private VisualElement m_Root;
         public void OnEnable()
         {
-            m_root = this.GetRootVisualContainer();
-            m_root.AddStyleSheetPath("mystyles");
+            m_Root = this.GetRootVisualContainer();
+            m_Root.AddStyleSheetPath("mystyles");
+            m_Root.AddToClassList("rootClass");
 
+            WorkSpace ws = new WorkSpace();
+            m_Root.Add(ws);
 
-
-            var boxes = new VisualContainer() { name = "boxesContainer" };
-            boxes.AddToClassList("horizontalContainer");
-            m_root.Add(boxes);
-
-            Pill pill = new Pill();
-            //resizer.Add(boxes);
-            m_root.Add(pill);
-
-            DraggableBox db = new DraggableBox();
-            m_root.Add(db);
-
+            const int itemsCount = 5;
+            for (int i = 0; i < itemsCount; i++)
+            {
+                DraggableBox db = new DraggableBox();
+                db.transform.position = new Vector3(i * (db.layout.width + 20), 0);
+                ws.AddElement(db);
+            }
 
             /*Texture2D backgroundTexrure = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/background.png");
             var image = new Image()
@@ -73,17 +93,6 @@ namespace UIElementsExamples
                 sourceRect = new Rect(0, 0, 50, 50)
             };
             boxes.Add(image);*/
-
-            const int itemsCount = 7;
-            for (int i = 0; i < itemsCount; i++)
-            {
-                var box = new VisualElement()
-                {
-                    style = { backgroundColor = new Color(1 - ((float)i / itemsCount), ((float)i / itemsCount), 0.5f) }
-                };
-                box.AddToClassList("testClass");
-                boxes.Add(box);
-            }
         }
     }
 #endif
