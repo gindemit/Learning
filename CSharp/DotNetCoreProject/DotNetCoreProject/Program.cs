@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using DotNetCoreProject.Model;
 
 namespace DotNetCoreProject
@@ -10,15 +9,18 @@ namespace DotNetCoreProject
         {
             using (var db = new RussianGermanDictionaryContext())
             {
-                var testQuery =
-                    from word in db.Words
-                    where word.Id < 100
-                    select word;
-
-                foreach (var word in testQuery)
+                WordTranslator translator = new WordTranslator(db);
+                do
                 {
-                    Console.WriteLine(word);
+                    Console.WriteLine("Enter word to translate");
+                    string input = Console.ReadLine();
+                    if (input == "q")
+                    {
+                        break;
+                    }
+                    translator.PrintTranslationToConsole(input);
                 }
+                while (true);
             }
 
             Console.ReadKey();

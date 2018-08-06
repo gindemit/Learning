@@ -1,10 +1,10 @@
 ﻿
 #include "stdafx.h"
-#include "use_vector.h"
+#include "use_map.h"
 
 
 int main()
 {
-    use_inserter();
+    create_add_items();
     return 0;
 }

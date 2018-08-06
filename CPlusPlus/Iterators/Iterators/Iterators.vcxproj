@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="use_map.h" />
     <ClInclude Include="use_vector.h" />
   </ItemGroup>
   <ItemGroup>
