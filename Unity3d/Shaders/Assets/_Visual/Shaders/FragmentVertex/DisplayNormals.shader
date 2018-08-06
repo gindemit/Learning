@@ -6,10 +6,14 @@
 
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+
+            struct appdata_base {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
 
             struct v2f {
-                float4 pos : SV_POSITION;
+                float4 pos : SV_Position;
                 fixed3 color : COLOR0;
             };
 
