@@ -1,22 +1,35 @@
 .rootClass {
-	align-items : stretch;
-	align-content : stretch;
-	overflow : scroll;
-}
-
-.workSpaceClass {
-	min-width: 600;
-    min-height: 600;
 	margin-top: 15;
 	margin-bottom: 15;
 	margin-left: 15;
 	margin-right: 15;
+}
+
+.workSpaceClass {
+    min-height: 800;
+	/*background-image : resource("background");*/
 	background-color : rgba(0, 0, 220, 0.1);
 }
 
-.draggableBoxClass {
-	position-type : manual;
+.node {
+	align-content : stretch;
+	font-size : 100;
+	/*font : resource("Verdana");*/
+	text-color : rgb(256, 0, 0);
+	min-height: 400;
 }
+
+.title {
+	font-size : 100;
+	text-color : rgb(256, 0, 0);
+}
+
+.draggableBoxTitle {
+	font-style : bold;
+}
+
+
+
 
 
 /*
@@ -32,7 +45,7 @@
 {"flex-grow", StylePropertyID.FlexGrow},ApplyFloat
 {"flex-shrink", StylePropertyID.FlexShrink},ApplyFloat
 {"overflow", StylePropertyID.Overflow},Visible,Scroll,Hidden
-{"position-left", StylePropertyID.PositionLeft},
+{"position-left", StylePropertyID.PositionLeft},ApplyFloat
 {"position-top", StylePropertyID.PositionTop},
 {"position-right", StylePropertyID.PositionRight},
 {"position-bottom", StylePropertyID.PositionBottom},
@@ -51,7 +64,7 @@
 {"position-type", StylePropertyID.PositionType},Relative,Absolute,Manual
 {"align-self", StylePropertyID.AlignSelf},
 {"text-alignment", StylePropertyID.TextAlignment},
-{"font-style", StylePropertyID.FontStyle},
+{"font-style", StylePropertyID.FontStyle},Normal, Bold, Italic, BoldAndItalic
 {"text-clipping", StylePropertyID.TextClipping},
 {"font", StylePropertyID.Font},
 {"font-size", StylePropertyID.FontSize},
