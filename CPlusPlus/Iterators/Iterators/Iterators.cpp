@@ -5,6 +5,6 @@
 
 int main()
 {
-    use_reverse_iterators();
+    use_uint_char_map();
     return 0;
 }
