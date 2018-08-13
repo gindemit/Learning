@@ -16,7 +16,6 @@
 	font-size : 100;
 	/*font : resource("Verdana");*/
 	text-color : rgb(256, 0, 0);
-	min-height: 400;
 }
 
 .title {
@@ -26,9 +25,13 @@
 
 .draggableBoxTitle {
 	font-style : bold;
+	position-type : manual;
+	flex-direction : column;
 }
 
-
+.draggableBoxClass {
+	background-color : rgba(220, 0, 0, 0.9);
+}
 
 
 

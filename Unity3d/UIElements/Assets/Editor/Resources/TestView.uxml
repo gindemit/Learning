@@ -12,4 +12,5 @@
 "
 >
   <engine:Label text="Hello World!" />
+  <engine:Button text="Test Button" />
 </engine:UXML>

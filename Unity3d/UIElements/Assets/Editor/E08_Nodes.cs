@@ -26,14 +26,20 @@ namespace UIElementsExamples
     public class PortDataTwo { }
     public class PortDataThree { }
 
-    public class DraggableBox : Node
+    public class DraggableBox : GraphElement
     {
         public DraggableBox()
         {
             name = "DraggableBox";
 
-            var titleLable = this.Q<Label>(name: "title-label");
-            titleLable.AddToClassList("draggableBoxTitle");
+            var tpl = EditorGUIUtility.Load("UXML/GraphView/Node.uxml") as VisualTreeAsset;
+            var my = EditorGUIUtility.Load("Assets/Editor/Resources/TestView.uxml") as VisualTreeAsset;
+
+            my.CloneTree(this, new System.Collections.Generic.Dictionary<string, VisualElement>());
+            //EditorGUIUtility.
+            Debug.Log(my.ToString());
+            //var titleLable = this.Q<Label>(name: "title-label");
+            //titleLable.AddToClassList("draggableBoxTitle");
 
             SetSize(new Vector2(300, 300));
             capabilities =
@@ -45,14 +51,14 @@ namespace UIElementsExamples
                 Capabilities.Droppable |
                 Capabilities.Ascendable;
 
-            title = "Floating Box";
+            //title = "Floating Box";
             AddToClassList("draggableBoxClass");
 
             AddPorts(typeof(PortDataOne));
             AddPorts(typeof(PortDataTwo));
             AddPorts(typeof(PortDataThree));
 
-            mainContainer.Add(new Label("Test message 1"));
+            /*mainContainer.Add(new Label("Test message 1"));
             mainContainer.Add(new Label("Test message 2"));
             mainContainer.Add(new Label("Test message 3"));
             mainContainer.Add(new Label("Test message 4"));
@@ -63,14 +69,13 @@ namespace UIElementsExamples
             mainContainer.Add(new Label("Test message 9"));
             mainContainer.Add(new Label("Test message 10"));
             mainContainer.Add(new Label("Test message 11"));
-            mainContainer.Add(new Label("Test message 12"));
-
+            mainContainer.Add(new Label("Test message 12"));*/
         }
 
         private void AddPorts(Type type)
         {
-            inputContainer.Add(InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, type));
-            outputContainer.Add(InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, type));
+            //inputContainer.Add(InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, type));
+            //outputContainer.Add(InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, type));
         }
     }
 
