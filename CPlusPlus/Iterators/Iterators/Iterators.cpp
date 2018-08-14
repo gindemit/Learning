@@ -5,6 +5,6 @@
 
 int main()
 {
-    use_uint_char_map();
+    use_max_size();
     return 0;
 }
