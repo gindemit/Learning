@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using DotNetCoreProject.Model;
 
 namespace DotNetCoreProject
@@ -22,8 +24,6 @@ namespace DotNetCoreProject
                 }
                 while (true);
             }
-
-            Console.ReadKey();
         }
     }
-}   
+}

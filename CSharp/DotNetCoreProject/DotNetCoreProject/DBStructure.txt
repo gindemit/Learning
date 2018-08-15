@@ -1,0 +1,74 @@
+CREATE TABLE IF NOT EXISTS word (
+	idWord INTEGER,
+	name VARCHAR2(255),
+	partGenus INTEGER,
+	plural VARCHAR2(10),
+
+	PRIMARY KEY (idWord ASC)
+);
+
+CREATE TABLE IF NOT EXISTS categoryName (
+	idCategoryName INTEGER,
+	name VARCHAR2(100),
+	
+	PRIMARY KEY (idCategoryName ASC)
+);
+
+CREATE TABLE IF NOT EXISTS wordCategory (
+	idCategory INTEGER,
+	idWord INTEGER,
+	idCategoryName INTEGER,
+
+	PRIMARY KEY (idCategory ASC)
+	-- FOREIGN KEY (idWord) REFERENCES word(idWord),
+	-- FOREIGN KEY (idCategoryName) REFERENCES categoryName(idCategoryName)
+);
+
+CREATE TABLE IF NOT EXISTS categoryWord (
+	idWord INTEGER,
+	idCategory INTEGER,
+	definition VARCHAR2(255),
+	description VARCHAR (50),
+	
+	PRIMARY KEY (idWord, idCategory)
+	-- FOREIGN KEY (idWord) REFERENCES word(idWord),
+	-- FOREIGN KEY (idCategory) REFERENCES wordCategory(idCategory)
+) WITHOUT ROWID;
+
+CREATE INDEX wordNameIndex ON word(name);
+CREATE INDEX wordCategoryIdWordIndex ON wordCategory(idWord);
+CREATE INDEX categoryWordIdCategoryIndex ON categoryWord(idCategory);
+DROP INDEX categoryWordIdWordIndex;
+
+
+SELECT w.id, w.name, w.deel, cw.Omschrijving FROM categorywoord cw JOIN woord w on cw.idWoord=w.id where length(cw.Omschrijving) > 0 AND instr(w.deel, cw.Omschrijving) > 0 LIMIT 100
+SELECT count(*), w.id, w.name, w.deel, cw.Omschrijving, cw.vooromschrijving FROM categorywoord cw JOIN woord w on cw.idWoord=w.id where w.deel LIKE ' нареч.%'
+
+SELECT
+	toTranslateWordName,
+	translatedCategoryName,
+	w.Name,
+	w.partGenus,
+	w.plural,
+	translatedDefinition,
+	translatedDescription
+FROM 
+(
+	SELECT 
+		w.name AS toTranslateWordName,
+		cw.idWord AS translatedId,
+		cw.definition AS translatedDefinition,
+		cw.description AS translatedDescription,
+		cn.name AS translatedCategoryName
+	FROM word w
+		JOIN wordCategory wc ON w.idWord=wc.idWord
+		JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+		JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName
+	WHERE w.name = 'Test'
+)
+JOIN word w ON w.idWord=translatedId
+
+	
+
+	
+	
