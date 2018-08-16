@@ -37,11 +37,10 @@ namespace UIElementsExamples
 
             my.CloneTree(this, new System.Collections.Generic.Dictionary<string, VisualElement>());
             //EditorGUIUtility.
-            Debug.Log(my.ToString());
             //var titleLable = this.Q<Label>(name: "title-label");
             //titleLable.AddToClassList("draggableBoxTitle");
 
-            SetSize(new Vector2(300, 300));
+            SetSize(new Vector2(400, 700));
             capabilities =
                 Capabilities.Selectable |
                 Capabilities.Collapsible |
