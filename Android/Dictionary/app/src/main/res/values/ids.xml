@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="imageView" type="id" />
+    <item name="textView" type="id" />
+    <item name="drawer_layout" type="id" />
+    <item name="layout_contain_main" type="id" />
+    <item name="layout_view" type="id" />
+    <item type="id" name="toolbar_main">false</item>
+    <item type="id" name="edit_search">false</item>
+    <item type="id" name="txtVersion">false</item>
+    <item type="id" name="progressBar1">false</item>
+</resources>
