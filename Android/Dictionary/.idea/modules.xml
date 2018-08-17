@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Dictionary.iml" filepath="$PROJECT_DIR$/Dictionary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Dictionary.iml" filepath="$PROJECT_DIR$/Dictionary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/googleplaydownloaderlibrary/googleplaydownloaderlibrary.iml" filepath="$PROJECT_DIR$/googleplaydownloaderlibrary/googleplaydownloaderlibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/googleplaylicenselibrary/googleplaylicenselibrary.iml" filepath="$PROJECT_DIR$/googleplaylicenselibrary/googleplaylicenselibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/market_licensing/market_licensing.iml" filepath="$PROJECT_DIR$/market_licensing/market_licensing.iml" />
     </modules>
   </component>
 </project>

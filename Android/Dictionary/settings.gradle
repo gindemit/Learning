@@ -1,1 +1,2 @@
-include ':app', ':googleplaylicenselibrary', ':googleplaydownloaderlibrary'
+include ':app'
+include ':market_licensing'
