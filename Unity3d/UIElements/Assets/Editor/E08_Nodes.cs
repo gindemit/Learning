@@ -31,6 +31,7 @@ namespace UIElementsExamples
         public DraggableBox()
         {
             name = "DraggableBox";
+            AddToClassList("draggableBoxClass");
 
             var tpl = EditorGUIUtility.Load("UXML/GraphView/Node.uxml") as VisualTreeAsset;
             var my = EditorGUIUtility.Load("Assets/Editor/Resources/TestView.uxml") as VisualTreeAsset;
@@ -51,8 +52,6 @@ namespace UIElementsExamples
                 Capabilities.Ascendable;
 
             //title = "Floating Box";
-            AddToClassList("draggableBoxClass");
-
             AddPorts(typeof(PortDataOne));
             AddPorts(typeof(PortDataTwo));
             AddPorts(typeof(PortDataThree));
@@ -84,22 +83,17 @@ namespace UIElementsExamples
     {
         private WorkSpace m_WorkSpace;
 
-        public void OnEnable()
+        private void OnEnable()
         {
             VisualElement m_Root = this.GetRootVisualContainer();
             m_Root.AddStyleSheetPath("mystyles");
             m_Root.AddToClassList("rootClass");
 
-            m_WorkSpace = new WorkSpace();
-            m_Root.Add(m_WorkSpace);
-
-            const int itemsCount = 5;
-            for (int i = 0; i < itemsCount; i++)
-            {
-                DraggableBox db = new DraggableBox();
-                db.transform.position = new Vector3(i * (db.layout.width + 20), 0);
-                m_WorkSpace.AddElement(db);
-            }
+            BuildWorkspace(m_Root);
+        }
+        private void OnFocus()
+        {
+            BuildWorkspace(this.GetRootVisualContainer());
         }
         private void OnGUI()
         {
@@ -108,6 +102,21 @@ namespace UIElementsExamples
                 m_WorkSpace.SetSize(new Vector2(position.width, position.height));
             }
 
+        }
+
+        private void BuildWorkspace(VisualElement root)
+        {
+            root.Clear();
+            m_WorkSpace = new WorkSpace();
+            root.Add(m_WorkSpace);
+
+            const int itemsCount = 5;
+            for (int i = 0; i < itemsCount; i++)
+            {
+                DraggableBox db = new DraggableBox();
+                db.transform.position = new Vector3(i * (db.layout.width + 20), 0);
+                m_WorkSpace.AddElement(db);
+            }
         }
 
         [MenuItem("UIElementsExamples/08_Nodes")]
