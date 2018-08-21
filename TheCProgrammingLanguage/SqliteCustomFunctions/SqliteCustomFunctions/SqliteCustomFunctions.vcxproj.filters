@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="sqlite">
+      <UniqueIdentifier>{93e534ba-1e19-4023-a784-de19916ac5f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nunicode">
+      <UniqueIdentifier>{fa04b47b-01cb-402f-958d-a847ba49cb39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nunicode\libnu">
+      <UniqueIdentifier>{362357ac-8727-4520-aeed-17cb9248ba6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nunicode\sqlite3">
+      <UniqueIdentifier>{903ade3a-939e-4a27-ab51-b778825743f3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3ext.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite_custom_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compare_strings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite_custom_collations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\casemap.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\casemap_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\cesu8.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\cesu8_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\config.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\defines.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\ducet.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\extra.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\libnu.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\mph.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\strcoll.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\strcoll_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\strings.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\udb.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\unaccent.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf8.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf8_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf16.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf16_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf16be.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf16he.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf16le.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf32.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf32_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf32be.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf32he.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\utf32le.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\validate.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\libnu\version.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\sqlite3\nusqlite3.h">
+      <Filter>nunicode\sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="nunicode\sqlite3\version.h">
+      <Filter>nunicode\sqlite3</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sqlite\sqlite3.c">
+      <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite\shell.c">
+      <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="SqliteCustomFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\cesu8.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\ducet.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\extra.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\strcoll.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\strings.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\tofold.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\tolower.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\tounaccent.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\toupper.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf8.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf16.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf16be.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf16he.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf16le.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf32.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf32be.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf32he.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\utf32le.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\validate.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\libnu\version.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="nunicode\sqlite3\nusqlite3.c">
+      <Filter>nunicode\sqlite3</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="nunicode\libnu\CMakeLists.txt">
+      <Filter>nunicode\libnu</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
