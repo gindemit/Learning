@@ -6,9 +6,9 @@
 int callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
     for (i = 0; i < argc; ++i) {
-        printf("%s = %sn", azColName[i], argv[i] ? argv[i] : "NULL");
+        //printf("%s = %sn", azColName[i], argv[i] ? argv[i] : "NULL");
     }
-    printf("n");
+    //printf("n");
     return 0;
 }
 
@@ -23,7 +23,7 @@ Java_com_gindemit_dictionary_MainActivity_stringFromJNI(
     int rv = sqlite3_open("/data/data/com.gindemit.dictionary/dict.db", &db);
     if (rv) {
         char msg[256];
-        sprintf(msg, "Cannot open database: %sn", sqlite3_errmsg(db));
+        //sprintf(msg, "Cannot open database: %sn", sqlite3_errmsg(db));
         __android_log_print(ANDROID_LOG_VERBOSE, "Dictionary", msg, 1);
         sqlite3_close(db);
     }

@@ -20,6 +20,8 @@ add_library( # Sets the name of the library.
              src/main/cpp/native-lib.cpp
              src/main/cpp/sqlite/sqlite3.c )
 
+# target_compile_definitions(native-lib PRIVATE SQLITE_ENABLE_ICU)
+
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library
