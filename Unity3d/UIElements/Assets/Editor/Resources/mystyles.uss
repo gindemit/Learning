@@ -67,6 +67,28 @@
 	visibility : visible;
 }
 
+.noWrap {
+	min-height : 300;
+	min-width : 300;
+	flex-wrap : wrap;
+	flex-direction : row;
+	background-color : rgba(220, 0, 0, 0.4);
+}
+
+.flexBasisGrowShrink {
+	height : 100;
+	width : 100;
+	flex-grow : 1;
+	flex-shrink : 1;
+	background-color : rgba(0, 0, 220, 0.6);
+}
+.flexBasisGrowShrink2 {
+	height : 100;
+	width : 100;
+	flex-grow : 1;
+	flex-shrink : 0.1;
+	background-color : rgba(0, 0, 220, 0.6);
+}
 
 
 /*

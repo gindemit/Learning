@@ -31,10 +31,9 @@ namespace UIElementsExamples
         public DraggableBox()
         {
             name = "DraggableBox";
-            AddToClassList("draggableBoxClass");
 
-            var tpl = EditorGUIUtility.Load("UXML/GraphView/Node.uxml") as VisualTreeAsset;
-            var my = EditorGUIUtility.Load("Assets/Editor/Resources/TestView.uxml") as VisualTreeAsset;
+            //var tpl = EditorGUIUtility.Load("UXML/GraphView/Node.uxml") as VisualTreeAsset;
+            var my = EditorGUIUtility.Load("Assets/Editor/Resources/FlexBasisTest.uxml") as VisualTreeAsset;
 
             my.CloneTree(this, new System.Collections.Generic.Dictionary<string, VisualElement>());
             //EditorGUIUtility.
@@ -110,7 +109,7 @@ namespace UIElementsExamples
             m_WorkSpace = new WorkSpace();
             root.Add(m_WorkSpace);
 
-            const int itemsCount = 5;
+            const int itemsCount = 1;
             for (int i = 0; i < itemsCount; i++)
             {
                 DraggableBox db = new DraggableBox();
