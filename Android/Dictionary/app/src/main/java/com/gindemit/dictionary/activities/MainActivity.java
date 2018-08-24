@@ -14,6 +14,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.gindemit.dictionary.R;
 import com.gindemit.dictionary.fragments.IOnListFragmentInteractionListener;
@@ -58,9 +60,30 @@ public class MainActivity
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-
-
         //onCreateLogic();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search_whole_word:
+                item.setChecked(!item.isChecked());
+                return true;
+            case R.id.search_case_sensitive:
+                item.setChecked(!item.isChecked());
+                return true;
+            case R.id.search_the_end:
+                item.setChecked(!item.isChecked());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onCreateLogic() {
@@ -148,9 +171,6 @@ public class MainActivity
         setSupportActionBar(myToolbar);
 
         final ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
     }
 
 

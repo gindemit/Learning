@@ -18,4 +18,7 @@
     <string name="text_button_resume">Resume Download</string>
     <string name="text_button_cancel">Cancel</string>
     <string name="text_button_cancel_verify">Cancel Verification</string>
+    <string name="whole_word_app_bar_menu_item">Whole Word</string>
+    <string name="case_sensitive_app_bar_menu_item">Case Sensitive</string>
+    <string name="search_to_end_app_bar_menu_item">Search End</string>
 </resources>
