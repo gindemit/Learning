@@ -1,45 +1,24 @@
 package com.gindemit.dictionary.io;
 
 import android.content.Context;
-
-import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class ExternalStoragePermissionChecker {
 
-    private final Context _context;
 
-    public ExternalStoragePermissionChecker(Context context)
+    public static boolean canWriteToObbDir(Context context)
     {
-        _context = context;
-    }
-
-    private void CheckIfTheReadExternalStoragePermissionIsRequired()
-    {
-        String obb_filename = _context.getObbDir().getName();
+        String obb_filename = context.getObbDir().getName();
         File obb = new File(obb_filename);
-        boolean open_failed = false;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(obb));
-            open_failed = false;
-            ReadObbFile(br);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(obb));
         } catch (IOException e) {
-            open_failed = true;
+            return true;
         }
-
-        if (open_failed) {
-            // request READ_EXTERNAL_STORAGE permission before reading OBB file
-            ReadObbFileWithPermission();
-        }
+        return false;
     }
-    void ReadObbFile(BufferedReader br)
-    {
-        //Save to getExternalFilesDir
-        //getExternalFilesDir(null);
-    }
-    void ReadObbFileWithPermission()
-    {}
 }

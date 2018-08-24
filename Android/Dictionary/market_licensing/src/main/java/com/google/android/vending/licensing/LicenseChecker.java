@@ -37,6 +37,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -146,13 +147,12 @@ public class LicenseChecker implements ServiceConnection {
             if (mService == null) {
                 Log.i(TAG, "Binding to licensing service.");
                 try {
-                    boolean bindResult = mContext
-                            .bindService(
-                                    new Intent(
-                                            new String(
-                                                    Base64.decode("Y29tLmFuZHJvaWQudmVuZGluZy5saWNlbnNpbmcuSUxpY2Vuc2luZ1NlcnZpY2U="))),
-                                    this, // ServiceConnection.
-                                    Context.BIND_AUTO_CREATE);
+                    Intent serviceIntent = new Intent(new String(Base64.decode("Y29tLmFuZHJvaWQudmVuZGluZy5saWNlbnNpbmcuSUxpY2Vuc2luZ1NlcnZpY2U=")));
+                    serviceIntent.setPackage("com.android.vending");
+
+                    boolean bindResult = mContext.bindService(serviceIntent,
+                            this, // ServiceConnection.
+                            Context.BIND_AUTO_CREATE);
 
                     if (bindResult) {
                         mPendingChecks.offer(validator);
@@ -251,10 +251,10 @@ public class LicenseChecker implements ServiceConnection {
                         if (logResponse) {
                             String android_id = Secure.getString(mContext.getContentResolver(),
                                     Secure.ANDROID_ID);
-                            Date date = new Date();
+                            SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
                             Log.d(TAG, "Server Failure: " + stringError);
                             Log.d(TAG, "Android ID: " + android_id);
-                            Log.d(TAG, "Time: " + date.toGMTString());
+                            Log.d(TAG, "Time: " + df.format(new Date()) + " GMT");
                         }
                     }
 

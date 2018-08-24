@@ -500,7 +500,7 @@ public class DownloadThread {
                 closeDestination(state);
                 return;
             } catch (IOException ex) {
-                if (!Helpers.isExternalMediaMounted()) {
+                if (Helpers.externalMediaIsNotMounted()) {
                     throw new StopRequest(DownloaderService.STATUS_DEVICE_NOT_FOUND_ERROR,
                             "external media not mounted while writing destination file");
                 }

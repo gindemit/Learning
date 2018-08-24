@@ -15,7 +15,7 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 extern "C" JNIEXPORT jstring
 
 JNICALL
-Java_com_gindemit_dictionary_MainActivity_stringFromJNI(
+Java_com_gindemit_dictionary_activities_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
 

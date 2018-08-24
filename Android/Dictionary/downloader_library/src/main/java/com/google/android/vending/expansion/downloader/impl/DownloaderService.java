@@ -1229,7 +1229,7 @@ public abstract class DownloaderService extends CustomIntentService implements I
             throws GenerateSaveFileError {
         String path = generateTempSaveFileName(filename);
         File expPath = new File(path);
-        if (!Helpers.isExternalMediaMounted()) {
+        if (Helpers.externalMediaIsNotMounted()) {
             Log.d(Constants.TAG, "External media not mounted: " + path);
             throw new GenerateSaveFileError(STATUS_DEVICE_NOT_FOUND_ERROR,
                     "external media is not yet mounted");

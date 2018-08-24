@@ -82,10 +82,8 @@ public class Helpers {
                 "Cannot determine filesystem root for " + path);
     }
 
-    public static boolean isExternalMediaMounted() {
-        if (!Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            // No SD card found.
+    public static boolean externalMediaIsNotMounted() {
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             if ( Constants.LOGVV ) {
                 Log.d(Constants.TAG, "no external storage");
             }
@@ -102,8 +100,8 @@ public class Helpers {
         StatFs stat = new StatFs(root.getPath());
         // put a bit of margin (in case creating the file grows the system by a
         // few blocks)
-        long availableBlocks = (long) stat.getAvailableBlocks() - 4;
-        return stat.getBlockSize() * availableBlocks;
+        long availableBlocks = stat.getAvailableBlocksLong() - 4;
+        return stat.getBlockSizeLong() * availableBlocks;
     }
 
     /**
@@ -213,14 +211,15 @@ public class Helpers {
      * download
      */
     static public String generateSaveFileName(Context c, String fileName) {
-        String path = getSaveFilePath(c)
-                + File.separator + fileName;
+        String path = getSaveFilePath(c) + File.separator + fileName;
         return path;
     }
 
     static public String getSaveFilePath(Context c) {
         File root = Environment.getExternalStorageDirectory();
         String path = root.toString() + Constants.EXP_PATH + c.getPackageName();
+        File obb = c.getObbDir();
+        Log.i("getSaveFilePath", path + "\n" + obb.toString());
         return path;
     }
 

@@ -2,6 +2,7 @@ package com.gindemit.dictionary.activities;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -16,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gindemit.dictionary.R;
+import com.gindemit.dictionary.io.IObbFilesCheckerClient;
+import com.gindemit.dictionary.io.ObbFilesChecker;
 import com.gindemit.dictionary.services.ObbDownloadService;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
@@ -25,10 +28,10 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 
-public class ObbDownloaderActivity extends AppCompatActivity implements IDownloaderClient {
+public class ObbDownloaderActivity extends AppCompatActivity implements IDownloaderClient, IObbFilesCheckerClient {
 
     private static final String LOG_TAG = "LVLDownloader";
-    private ProgressBar mPB;
+    private ProgressBar mProgressBar;
 
     private TextView mStatusText;
     private TextView mProgressFraction;
@@ -42,17 +45,15 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
     private Button mPauseButton;
 
     private boolean mStatePaused;
-    private int mState;
 
     private IDownloaderService mRemoteService;
 
     private IStub mDownloaderClientStub;
 
-    private void setState(int newState) {
-        if (mState != newState) {
-            mState = newState;
-            mStatusText.setText(Helpers.getDownloaderStringResourceIDFromState(newState));
-        }
+    private ObbFilesChecker mObbFilesChecker;
+
+    private void updateStatusText(int newState) {
+        mStatusText.setText(Helpers.getDownloaderStringResourceIDFromState(newState));
     }
 
     private void setButtonPausedState(boolean paused) {
@@ -63,237 +64,10 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
     }
 
     /**
-     * This is a little helper class that demonstrates simple testing of an
-     * Expansion APK file delivered by Market. You may not wish to hard-code
-     * things such as file lengths into your executable... and you may wish to
-     * turn this code off during application development.
-     */
-    private static class XAPKFile {
-        public final boolean mIsMain;
-        public final int mFileVersion;
-        public final long mFileSize;
-
-        XAPKFile(boolean isMain, int fileVersion, long fileSize) {
-            mIsMain = isMain;
-            mFileVersion = fileVersion;
-            mFileSize = fileSize;
-        }
-    }
-
-    /**
-     * Here is where you place the data that the validator will use to determine
-     * if the file was delivered correctly. This is encoded in the source code
-     * so the application can easily determine whether the file has been
-     * properly delivered without having to talk to the server. If the
-     * application is using LVL for licensing, it may make sense to eliminate
-     * these checks and to just rely on the server.
-     */
-    private static final XAPKFile[] xAPKS = {
-            new XAPKFile(
-                    true, // true signifies a main file
-                    3, // the version of the APK that the file was uploaded
-                    // against
-                    687801613L // the length of the file in bytes
-            ),
-            new XAPKFile(
-                    false, // false signifies a patch file
-                    4, // the version of the APK that the patch file was uploaded
-                    // against
-                    512860L // the length of the patch file in bytes
-            )
-    };
-
-    /**
-     * Go through each of the APK Expansion files defined in the structure above
-     * and determine if the files are present and match the required size. Free
-     * applications should definitely consider doing this, as this allows the
-     * application to be launched for the first time without having a network
-     * connection present. Paid applications that use LVL should probably do at
-     * least one LVL check that requires the network to be present, so this is
-     * not as necessary.
-     *
-     * @return true if they are present.
-     */
-    boolean expansionFilesDelivered() {
-        for (XAPKFile xf : xAPKS) {
-            String fileName = Helpers.getExpansionAPKFileName(this, xf.mIsMain, xf.mFileVersion);
-            if (!Helpers.doesFileExist(this, fileName, xf.mFileSize, false))
-                return false;
-        }
-        return true;
-    }
-
-    /**
      * Calculating a moving average for the validation speed so we don't get
      * jumpy calculations for time etc.
      */
     static private final float SMOOTHING_FACTOR = 0.005f;
-
-    /**
-     * Used by the async task
-     */
-    private boolean mCancelValidation;
-
-    /**
-     * Go through each of the Expansion APK files and open each as a zip file.
-     * Calculate the CRC for each file and return false if any fail to match.
-     *
-     * @return true if XAPKZipFile is successful
-     */
-    void validateXAPKZipFiles() {
-        @SuppressLint("StaticFieldLeak") AsyncTask<Object, DownloadProgressInfo, Boolean> validationTask = new AsyncTask<Object, DownloadProgressInfo, Boolean>() {
-
-            @Override
-            protected void onPreExecute() {
-                mDashboard.setVisibility(View.VISIBLE);
-                mCellMessage.setVisibility(View.GONE);
-                mStatusText.setText(R.string.text_verifying_download);
-                mPauseButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mCancelValidation = true;
-                    }
-                });
-                mPauseButton.setText(R.string.text_button_cancel_verify);
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Boolean doInBackground(Object... params) {
-                for (XAPKFile xf : xAPKS) {
-                    String fileName = Helpers.getExpansionAPKFileName(
-                            ObbDownloaderActivity.this,
-                            xf.mIsMain, xf.mFileVersion);
-                    if (!Helpers.doesFileExist(ObbDownloaderActivity.this, fileName,
-                            xf.mFileSize, false))
-                        return false;
-                    fileName = Helpers
-                            .generateSaveFileName(ObbDownloaderActivity.this, fileName);
-                    /*ZipResourceFile zrf;
-                    byte[] buf = new byte[1024 * 256];
-                    try {
-                        zrf = new ZipResourceFile(fileName);
-                        ZipEntryRO[] entries = zrf.getAllEntries();
-                        *//**
-                         * First calculate the total compressed length
-                         *//*
-                        long totalCompressedLength = 0;
-                        for (ZipEntryRO entry : entries) {
-                            totalCompressedLength += entry.mCompressedLength;
-                        }
-                        float averageVerifySpeed = 0;
-                        long totalBytesRemaining = totalCompressedLength;
-                        long timeRemaining;
-                        *//**
-                         * Then calculate a CRC for every file in the Zip file,
-                         * comparing it to what is stored in the Zip directory.
-                         * Note that for compressed Zip files we must extract
-                         * the contents to do this comparison.
-                         *//*
-                        for (ZipEntryRO entry : entries) {
-                            if (-1 != entry.mCRC32) {
-                                long length = entry.mUncompressedLength;
-                                CRC32 crc = new CRC32();
-                                DataInputStream dis = null;
-                                try {
-                                    dis = new DataInputStream(
-                                            zrf.getInputStream(entry.mFileName));
-
-                                    long startTime = SystemClock.uptimeMillis();
-                                    while (length > 0) {
-                                        int seek = (int) (length > buf.length ? buf.length
-                                                : length);
-                                        dis.readFully(buf, 0, seek);
-                                        crc.update(buf, 0, seek);
-                                        length -= seek;
-                                        long currentTime = SystemClock.uptimeMillis();
-                                        long timePassed = currentTime - startTime;
-                                        if (timePassed > 0) {
-                                            float currentSpeedSample = (float) seek
-                                                    / (float) timePassed;
-                                            if (0 != averageVerifySpeed) {
-                                                averageVerifySpeed = SMOOTHING_FACTOR
-                                                        * currentSpeedSample
-                                                        + (1 - SMOOTHING_FACTOR)
-                                                        * averageVerifySpeed;
-                                            } else {
-                                                averageVerifySpeed = currentSpeedSample;
-                                            }
-                                            totalBytesRemaining -= seek;
-                                            timeRemaining = (long) (totalBytesRemaining / averageVerifySpeed);
-                                            this.publishProgress(
-                                                    new DownloadProgressInfo(
-                                                            totalCompressedLength,
-                                                            totalCompressedLength
-                                                                    - totalBytesRemaining,
-                                                            timeRemaining,
-                                                            averageVerifySpeed)
-                                            );
-                                        }
-                                        startTime = currentTime;
-                                        if (mCancelValidation)
-                                            return true;
-                                    }
-                                    if (crc.getValue() != entry.mCRC32) {
-                                        Log.e(Constants.TAG,
-                                                "CRC does not match for entry: "
-                                                        + entry.mFileName);
-                                        Log.e(Constants.TAG,
-                                                "In file: " + entry.getZipFileName());
-                                        return false;
-                                    }
-                                } finally {
-                                    if (null != dis) {
-                                        dis.close();
-                                    }
-                                }
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return false;
-                    }*/
-                }
-                return true;
-            }
-
-            @Override
-            protected void onProgressUpdate(DownloadProgressInfo... values) {
-                onDownloadProgress(values[0]);
-                super.onProgressUpdate(values);
-            }
-
-            @Override
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    mDashboard.setVisibility(View.VISIBLE);
-                    mCellMessage.setVisibility(View.GONE);
-                    mStatusText.setText(R.string.text_validation_complete);
-                    mPauseButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                        }
-                    });
-                    mPauseButton.setText(android.R.string.ok);
-                } else {
-                    mDashboard.setVisibility(View.VISIBLE);
-                    mCellMessage.setVisibility(View.GONE);
-                    mStatusText.setText(R.string.text_validation_failed);
-                    mPauseButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                        }
-                    });
-                    mPauseButton.setText(android.R.string.cancel);
-                }
-                super.onPostExecute(result);
-            }
-
-        };
-        validationTask.execute(new Object());
-    }
 
     /**
      * If the download isn't present, we initialize the download UI. This ties
@@ -304,7 +78,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
                 (this, ObbDownloadService.class);
         setContentView(R.layout.activity_obb_downloader);
 
-        mPB = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mStatusText = (TextView) findViewById(R.id.statusText);
         mProgressFraction = (TextView) findViewById(R.id.progressAsFraction);
         mProgressPercent = (TextView) findViewById(R.id.progressAsPercentage);
@@ -355,7 +129,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mObbFilesChecker = new ObbFilesChecker(this);
         /**
          * Both downloading and validation make use of the "download" UI
          */
@@ -366,7 +140,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
          * delivered (presumably by Market) For free titles, this is probably
          * worth doing. (so no Market request is necessary)
          */
-        if (!expansionFilesDelivered()) {
+        if (mObbFilesChecker.expansionFilesNotDelivered(this)) {
 
             try {
                 Intent launchIntent = ObbDownloaderActivity.this.getIntent();
@@ -405,7 +179,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
             }
 
         } else {
-            validateXAPKZipFiles();
+            mObbFilesChecker.validateXAPKZipFiles();
         }
 
     }
@@ -451,7 +225,6 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
      */
     @Override
     public void onDownloadStateChanged(int newState) {
-        setState(newState);
         boolean showDashboard = true;
         boolean showCellMessage = false;
         boolean paused;
@@ -504,7 +277,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
                 showDashboard = false;
                 paused = false;
                 indeterminate = false;
-                validateXAPKZipFiles();
+                mObbFilesChecker.validateXAPKZipFiles();
                 return;
             default:
                 paused = true;
@@ -520,8 +293,9 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
             mCellMessage.setVisibility(cellMessageVisibility);
         }
 
-        mPB.setIndeterminate(indeterminate);
+        mProgressBar.setIndeterminate(indeterminate);
         setButtonPausedState(paused);
+        updateStatusText(newState);
     }
 
     /**
@@ -536,8 +310,8 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
                 Helpers.getTimeRemaining(progress.mTimeRemaining)));
 
         progress.mOverallTotal = progress.mOverallTotal;
-        mPB.setMax((int) (progress.mOverallTotal >> 8));
-        mPB.setProgress((int) (progress.mOverallProgress >> 8));
+        mProgressBar.setMax((int) (progress.mOverallTotal >> 8));
+        mProgressBar.setProgress((int) (progress.mOverallProgress >> 8));
         mProgressPercent.setText(Long.toString(progress.mOverallProgress
                 * 100 /
                 progress.mOverallTotal) + "%");
@@ -548,7 +322,58 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
 
     @Override
     protected void onDestroy() {
-        this.mCancelValidation = true;
         super.onDestroy();
+    }
+
+    // ObbFilesChecker client methods
+
+    @Override
+    public Context GetContext() {
+        return this;
+    }
+    @Override
+    public void onPreCheck() {
+        mDashboard.setVisibility(View.VISIBLE);
+        mCellMessage.setVisibility(View.GONE);
+        mStatusText.setText(R.string.text_verifying_download);
+        mPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mObbFilesChecker.CancelValidation();
+            }
+        });
+        mPauseButton.setText(R.string.text_button_cancel_verify);
+    }
+
+    @Override
+    public void onCheckProgress(DownloadProgressInfo progress) {
+        onDownloadProgress(progress);
+    }
+
+    @Override
+    public void onPostCheck(boolean result) {
+        if (result) {
+            mDashboard.setVisibility(View.VISIBLE);
+            mCellMessage.setVisibility(View.GONE);
+            mStatusText.setText(R.string.text_validation_complete);
+            mPauseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            mPauseButton.setText(android.R.string.ok);
+        } else {
+            mDashboard.setVisibility(View.VISIBLE);
+            mCellMessage.setVisibility(View.GONE);
+            mStatusText.setText(R.string.text_validation_failed);
+            mPauseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            mPauseButton.setText(android.R.string.cancel);
+        }
     }
 }

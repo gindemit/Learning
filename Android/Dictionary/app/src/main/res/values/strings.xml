@@ -3,6 +3,9 @@
     <string name="navigation_home">Home</string>
     <string name="navigation_history">History</string>
     <string name="search_hint">Search</string>
+    <string name="search_tab">Search</string>
+    <string name="history_tab">History</string>
+    <string name="bookmark_tab">Bookmarks</string>
 
     <string name="text_paused_cellular">Would you like to enable downloading over cellular connections? Depending on your data plan, this may cost you money.</string>
     <string name="text_paused_cellular_2">If you choose not to enable downloading over cellular connections, the download will automatically resume when wi-fi is available.</string>
