@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -26,6 +29,9 @@ import com.gindemit.dictionary.io.ExternalStoragePermissionChecker;
 import com.gindemit.dictionary.io.IObbFilesCheckerClient;
 import com.gindemit.dictionary.io.ObbFilesChecker;
 import com.gindemit.dictionary.io.ObbFilesUnpacker;
+import com.gindemit.dictionary.listeners.OnNavigationItemSelectedListener;
+import com.gindemit.dictionary.listeners.OnPageChangedListener;
+import com.gindemit.dictionary.pager_adapter.IMainPagerAdapterClient;
 import com.gindemit.dictionary.pager_adapter.MainPagerAdapter;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.Helpers;
@@ -37,10 +43,12 @@ import java.io.IOException;
 
 public class MainActivity
         extends AppCompatActivity
-        implements IOnListFragmentInteractionListener {
+        implements IOnListFragmentInteractionListener,
+        IMainPagerAdapterClient {
 
     private ObbFilesChecker mObbFilesChecker;
     private ObbFilesUnpacker mObbFilesUnpacker;
+    private NavigationView mNavigationView;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -52,13 +60,19 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupActionBar();
+        mNavigationView = findViewById(R.id.navigation_view);
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         PagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new OnPageChangedListener(mNavigationView));
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        mNavigationView.setNavigationItemSelectedListener(
+                new OnNavigationItemSelectedListener(tabLayout,
+                    (DrawerLayout)findViewById(R.id.drawer_layout)));
 
         //onCreateLogic();
     }
@@ -167,10 +181,20 @@ public class MainActivity
     }
 
     private void setupActionBar() {
-        Toolbar myToolbar = findViewById(R.id.toolbar_main);
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
 
-        final ActionBar actionBar = getSupportActionBar();
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        /*final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);*/
     }
 
 
@@ -179,4 +203,9 @@ public class MainActivity
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
 }

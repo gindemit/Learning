@@ -11,4 +11,6 @@
     <item type="id" name="progressBar1">false</item>
     <item type="id" name="view_pager">false</item>
     <item type="id" name="tabs">false</item>
+    <item name="navigation_view" type="id" />
+    <item name="supportEmailTextView" type="id" />
 </resources>

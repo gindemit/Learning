@@ -11,11 +11,11 @@ import com.gindemit.dictionary.fragments.history.HistoryPageFragment;
 import com.gindemit.dictionary.fragments.search.SearchPageFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
-    private final Context mContext;
+    private final IMainPagerAdapterClient mClient;
 
-    public MainPagerAdapter(FragmentManager fm, Context context) {
+    public MainPagerAdapter(FragmentManager fm, IMainPagerAdapterClient client) {
         super(fm);
-        mContext = context;
+        mClient = client;
     }
 
     @Override
@@ -27,12 +27,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
                 return new HistoryPageFragment();
             case 2:
                 return new BookmarkPageFragment();
-            case 3:
-                return new SearchPageFragment();
-            case 4:
-                return new HistoryPageFragment();
-            case 5:
-                return new BookmarkPageFragment();
             default:
                 return null;
         }
@@ -42,17 +36,11 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return mContext.getString(R.string.search_tab);
+                return mClient.getContext().getString(R.string.search_tab);
             case 1:
-                return mContext.getString(R.string.history_tab);
+                return mClient.getContext().getString(R.string.history_tab);
             case 2:
-                return mContext.getString(R.string.bookmark_tab);
-            case 3:
-                return mContext.getString(R.string.search_tab);
-            case 4:
-                return mContext.getString(R.string.history_tab);
-            case 5:
-                return mContext.getString(R.string.bookmark_tab);
+                return mClient.getContext().getString(R.string.bookmark_tab);
             default:
                 return null;
         }
@@ -60,6 +48,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 6;
+        return 3;
     }
 }

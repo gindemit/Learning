@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Dictionary</string>
-    <string name="navigation_home">Home</string>
-    <string name="navigation_history">History</string>
-    <string name="search_hint">Search</string>
     <string name="search_tab">Search</string>
     <string name="history_tab">History</string>
     <string name="bookmark_tab">Bookmarks</string>
@@ -21,4 +18,9 @@
     <string name="whole_word_app_bar_menu_item">Whole Word</string>
     <string name="case_sensitive_app_bar_menu_item">Case Sensitive</string>
     <string name="search_to_end_app_bar_menu_item">Search End</string>
+    <string name="search_hint">Search</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="support_email">Write us a e-mail: dictionarylab@gmail.com</string>
 </resources>

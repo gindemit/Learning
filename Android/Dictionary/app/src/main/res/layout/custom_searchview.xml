@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <view xmlns:android="http://schemas.android.com/apk/res/android"
+        class="com.gindemit.dictionary.custom_view.SearchField"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/radius_edit_text"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:animateLayoutChanges="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="4dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_search_black_24dp" />
+
+        <EditText
+            android:id="@+id/search_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:lines="1"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@color/textColorPrimaryInverse"
+            android:textColorHint="@color/textColorHint"
+            android:textSize="18sp">
+
+        </EditText>
+
+        <ImageView
+            android:id="@+id/search_clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="4dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_clear_black_24dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </view>
+</android.support.constraint.ConstraintLayout>
