@@ -4,7 +4,7 @@ import android.content.Context;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 
 public interface IObbFilesCheckerClient {
-    Context GetContext();
+    Context getContext();
     void onPreCheck();
     void onCheckProgress(DownloadProgressInfo progress);
     void onPostCheck(boolean result);

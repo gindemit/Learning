@@ -1,11 +1,9 @@
 package com.gindemit.dictionary.activities;
 
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Messenger;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +16,7 @@ import android.widget.TextView;
 
 import com.gindemit.dictionary.R;
 import com.gindemit.dictionary.io.IObbFilesCheckerClient;
-import com.gindemit.dictionary.io.ObbFilesChecker;
+import com.gindemit.dictionary.io.ObbFilesUnpacker;
 import com.gindemit.dictionary.services.ObbDownloadService;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
@@ -28,7 +26,7 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 
-public class ObbDownloaderActivity extends AppCompatActivity implements IDownloaderClient, IObbFilesCheckerClient {
+public class ObbDownloadAndUnpackActivity extends AppCompatActivity implements IDownloaderClient, IObbFilesCheckerClient {
 
     private static final String LOG_TAG = "LVLDownloader";
     private ProgressBar mProgressBar;
@@ -50,7 +48,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
 
     private IStub mDownloaderClientStub;
 
-    private ObbFilesChecker mObbFilesChecker;
+    private ObbFilesUnpacker mObbFilesUnpacker;
 
     private void updateStatusText(int newState) {
         mStatusText.setText(Helpers.getDownloaderStringResourceIDFromState(newState));
@@ -76,7 +74,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
     private void initializeDownloadUI() {
         mDownloaderClientStub = DownloaderClientMarshaller.CreateStub
                 (this, ObbDownloadService.class);
-        setContentView(R.layout.activity_obb_downloader);
+        setContentView(R.layout.activity_obb_download_and_npack);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mStatusText = (TextView) findViewById(R.id.statusText);
@@ -121,72 +119,58 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
 
     }
 
-    /**
-     * Called when the activity is first create; we wouldn't create a layout in
-     * the case where we have the file and are moving to another activity
-     * without downloading.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mObbFilesChecker = new ObbFilesChecker(this);
-        /**
-         * Both downloading and validation make use of the "download" UI
-         */
-        initializeDownloadUI();
+        mObbFilesUnpacker = new ObbFilesUnpacker(this);
+       initializeDownloadUI();
 
-        /**
-         * Before we do anything, are the files we expect already here and
-         * delivered (presumably by Market) For free titles, this is probably
-         * worth doing. (so no Market request is necessary)
-         */
-        if (mObbFilesChecker.expansionFilesNotDelivered(this)) {
-
-            try {
-                Intent launchIntent = ObbDownloaderActivity.this.getIntent();
-                Intent intentToLaunchThisActivityFromNotification = new Intent(
-                        ObbDownloaderActivity
-                                .this, ObbDownloaderActivity.this.getClass());
-                intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
-
-                if (launchIntent.getCategories() != null) {
-                    for (String category : launchIntent.getCategories()) {
-                        intentToLaunchThisActivityFromNotification.addCategory(category);
-                    }
-                }
-
-                // Build PendingIntent used to open this activity from
-                // Notification
-                PendingIntent pendingIntent = PendingIntent.getActivity(
-                        ObbDownloaderActivity.this,
-                        0, intentToLaunchThisActivityFromNotification,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-                // Request to start the download
-                int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
-                        pendingIntent, ObbDownloadService.class);
-
-                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
-                    // The DownloaderService has started downloading the files,
-                    // show progress
-                    initializeDownloadUI();
-                } // otherwise, download not needed so we fall through to
-                // starting the movie
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
-                e.printStackTrace();
-            }
-
+        if (ObbFilesUnpacker.expansionFilesNotDelivered(this)) {
+            tryStartDownload();
         } else {
-            mObbFilesChecker.validateXAPKZipFiles();
+            mObbFilesUnpacker.unpackObbZipFiles();
         }
 
     }
 
-    /**
-     * Connect the stub to our service on start.
-     */
+    private void tryStartDownload() {
+        try {
+            Intent launchIntent = ObbDownloadAndUnpackActivity.this.getIntent();
+            Intent intentToLaunchThisActivityFromNotification = new Intent(
+                    ObbDownloadAndUnpackActivity
+                            .this, ObbDownloadAndUnpackActivity.this.getClass());
+            intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
+
+            if (launchIntent.getCategories() != null) {
+                for (String category : launchIntent.getCategories()) {
+                    intentToLaunchThisActivityFromNotification.addCategory(category);
+                }
+            }
+
+            // Build PendingIntent used to open this activity from
+            // Notification
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    ObbDownloadAndUnpackActivity.this,
+                    0, intentToLaunchThisActivityFromNotification,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            // Request to start the download
+            int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
+                    pendingIntent, ObbDownloadService.class);
+
+            if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
+                // The DownloaderService has started downloading the files,
+                // show progress
+                initializeDownloadUI();
+            } // otherwise, download not needed so we fall through to
+            // starting the movie
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "Cannot find own package! MAYDAY!");
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onStart() {
         if (null != mDownloaderClientStub) {
@@ -195,9 +179,6 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
         super.onStart();
     }
 
-    /**
-     * Disconnect the stub from our service on stop
-     */
     @Override
     protected void onStop() {
         if (null != mDownloaderClientStub) {
@@ -277,7 +258,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
                 showDashboard = false;
                 paused = false;
                 indeterminate = false;
-                mObbFilesChecker.validateXAPKZipFiles();
+                mObbFilesUnpacker.unpackObbZipFiles();
                 return;
             default:
                 paused = true;
@@ -325,24 +306,23 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
         super.onDestroy();
     }
 
-    // ObbFilesChecker client methods
-
+    // ObbFilesUnpacker client methods
     @Override
-    public Context GetContext() {
+    public Context getContext() {
         return this;
     }
     @Override
     public void onPreCheck() {
         mDashboard.setVisibility(View.VISIBLE);
         mCellMessage.setVisibility(View.GONE);
-        mStatusText.setText(R.string.text_verifying_download);
+        mStatusText.setText(R.string.text_unpacking_database_file);
         mPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mObbFilesChecker.CancelValidation();
+                mObbFilesUnpacker.CancelUnpacking();
             }
         });
-        mPauseButton.setText(R.string.text_button_cancel_verify);
+        mPauseButton.setText(R.string.text_button_cancel_unpacking);
     }
 
     @Override
@@ -355,7 +335,7 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
         if (result) {
             mDashboard.setVisibility(View.VISIBLE);
             mCellMessage.setVisibility(View.GONE);
-            mStatusText.setText(R.string.text_validation_complete);
+            mStatusText.setText(R.string.text_unpacking_complete);
             mPauseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -366,14 +346,16 @@ public class ObbDownloaderActivity extends AppCompatActivity implements IDownloa
         } else {
             mDashboard.setVisibility(View.VISIBLE);
             mCellMessage.setVisibility(View.GONE);
-            mStatusText.setText(R.string.text_validation_failed);
+            mStatusText.setText(R.string.text_unpacking_failed);
             mPauseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Intent intent = getIntent();
                     finish();
+                    startActivity(intent);
                 }
             });
-            mPauseButton.setText(android.R.string.cancel);
+            mPauseButton.setText(R.string.text_button_try_again);
         }
     }
 }

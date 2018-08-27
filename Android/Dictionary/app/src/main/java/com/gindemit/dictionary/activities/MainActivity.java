@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,28 +23,18 @@ import com.gindemit.dictionary.helpers.DialogViewer;
 import com.gindemit.dictionary.helpers.PermissionRequestCode;
 import com.gindemit.dictionary.helpers.PermissionsHelper;
 import com.gindemit.dictionary.io.ExternalStoragePermissionChecker;
-import com.gindemit.dictionary.io.IObbFilesCheckerClient;
-import com.gindemit.dictionary.io.ObbFilesChecker;
 import com.gindemit.dictionary.io.ObbFilesUnpacker;
 import com.gindemit.dictionary.listeners.OnNavigationItemSelectedListener;
 import com.gindemit.dictionary.listeners.OnPageChangedListener;
 import com.gindemit.dictionary.pager_adapter.IMainPagerAdapterClient;
 import com.gindemit.dictionary.pager_adapter.MainPagerAdapter;
-import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.Helpers;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class MainActivity
         extends AppCompatActivity
         implements IOnListFragmentInteractionListener,
         IMainPagerAdapterClient {
 
-    private ObbFilesChecker mObbFilesChecker;
-    private ObbFilesUnpacker mObbFilesUnpacker;
     private NavigationView mNavigationView;
 
     // Used to load the 'native-lib' library on application startup.
@@ -60,21 +47,9 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupActionBar();
-        mNavigationView = findViewById(R.id.navigation_view);
+        setupViewPagerAndNavigationView();
 
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        PagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), this);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new OnPageChangedListener(mNavigationView));
-
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        mNavigationView.setNavigationItemSelectedListener(
-                new OnNavigationItemSelectedListener(tabLayout,
-                    (DrawerLayout)findViewById(R.id.drawer_layout)));
-
-        //onCreateLogic();
+        onCreateLogic();
     }
 
     @Override
@@ -100,28 +75,6 @@ public class MainActivity
         }
     }
 
-    private void onCreateLogic() {
-        if (!ExternalStoragePermissionChecker.canWriteToObbDir(this)) {
-            RequestWriteExternalStoragePermission();
-            return;
-        }
-
-        if (startDownloadObbActivityIfNecessary()) {
-            return;
-        }
-        if (Helpers.externalMediaIsNotMounted()) {
-            showMountExternalStorageMessage();
-            return;
-        }
-        if (unzipObbIfNecessary()) {
-            return;
-        }
-
-        // TODO: the db is unpacked and ready to use
-        // Example of a call to a native method
-        stringFromJNI();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
@@ -143,37 +96,55 @@ public class MainActivity
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                RequestWriteExternalStoragePermission();
+                                requestWriteExternalStoragePermission();
                             }
                         });
             }
         }
     }
 
-    private boolean unzipObbIfNecessary() {
-        mObbFilesUnpacker = new ObbFilesUnpacker();
-        if (mObbFilesUnpacker.UnpackIsNecessary()) {
-            Intent startObbUnpackActivityIntent = new Intent(MainActivity.this, ObbDownloaderActivity.class);
-            MainActivity.this.startActivity(startObbUnpackActivityIntent);
-            return true;
+    private void onCreateLogic() {
+        if (!ExternalStoragePermissionChecker.canWriteToObbDir(this)) {
+            requestWriteExternalStoragePermission();
+            return;
         }
-        return false;
+        if (Helpers.externalMediaIsNotMounted()) {
+            showMountExternalStorageMessage();
+            return;
+        }
+        if (ObbFilesUnpacker.expansionFilesNotDelivered(this)) {
+            startDownloadAndUnpackObbActivity();
+            return;
+        }
+        if (ObbFilesUnpacker.unpackIsNecessary(this)) {
+            startDownloadAndUnpackObbActivity();
+            return;
+        }
+        // TODO: the db is unpacked and ready to use
+        // Example of a call to a native method
+        stringFromJNI();
     }
 
     private void showMountExternalStorageMessage() {
-
+        DialogViewer.showAlertDialog(
+                this,
+                getString(R.string.storage_not_found_title),
+                getString(R.string.storage_not_found_message),
+                getString(R.string.ok_str),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        onCreateLogic();
+                    }
+                });
     }
 
-    private boolean startDownloadObbActivityIfNecessary() {
-        if (ObbFilesChecker.expansionFilesNotDelivered(this)) {
-            Intent startObbDownloaderActivityIntent = new Intent(MainActivity.this, ObbDownloaderActivity.class);
-            MainActivity.this.startActivity(startObbDownloaderActivityIntent);
-            return true;
-        }
-        return false;
+    private void startDownloadAndUnpackObbActivity() {
+        Intent startObbDownloaderActivityIntent = new Intent(MainActivity.this, ObbDownloadAndUnpackActivity.class);
+        MainActivity.this.startActivity(startObbDownloaderActivityIntent);
     }
 
-    private void RequestWriteExternalStoragePermission() {
+    private void requestWriteExternalStoragePermission() {
         PermissionsHelper.RequestPermissionIfNeeded(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -189,12 +160,22 @@ public class MainActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        /*final ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(true);*/
+    private void setupViewPagerAndNavigationView() {
+        mNavigationView = findViewById(R.id.navigation_view);
+
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        PagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new OnPageChangedListener(mNavigationView));
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        mNavigationView.setNavigationItemSelectedListener(
+                new OnNavigationItemSelectedListener(tabLayout,
+                        (DrawerLayout) findViewById(R.id.drawer_layout)));
     }
 
 

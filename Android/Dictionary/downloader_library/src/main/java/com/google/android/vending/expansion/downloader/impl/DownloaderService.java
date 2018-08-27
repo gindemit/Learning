@@ -930,7 +930,7 @@ public abstract class DownloaderService extends CustomIntentService implements I
                 }
 
                 // remove partially downloaded file if it is there
-                String deleteFile = Helpers.generateSaveFileName(this, oldFile);
+                String deleteFile = Helpers.generateObbFileAbsolutePath(this, oldFile);
                 File f = new File(deleteFile);
                 if (f.exists())
                     f.delete();
@@ -1216,7 +1216,7 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * download
      */
     public String generateTempSaveFileName(String fileName) {
-        String path = Helpers.getSaveFilePath(this)
+        String path = Helpers.getObbFilesDirAbsolutePath(this)
                 + File.separator + fileName + TEMP_EXT;
         return path;
     }

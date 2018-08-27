@@ -83,7 +83,7 @@ public class Helpers {
     }
 
     public static boolean externalMediaIsNotMounted() {
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             if ( Constants.LOGVV ) {
                 Log.d(Constants.TAG, "no external storage");
             }
@@ -206,21 +206,14 @@ public class Helpers {
         return (mainFile ? "main." : "patch.") + versionCode + "." + c.getPackageName() + ".obb";
     }
 
-    /**
-     * Returns the filename (where the file should be saved) from info about a
-     * download
-     */
-    static public String generateSaveFileName(Context c, String fileName) {
-        String path = getSaveFilePath(c) + File.separator + fileName;
+   public static String generateObbFileAbsolutePath(Context c, String fileName) {
+        String path = getObbFilesDirAbsolutePath(c) + File.separator + fileName;
         return path;
     }
 
-    static public String getSaveFilePath(Context c) {
-        File root = Environment.getExternalStorageDirectory();
-        String path = root.toString() + Constants.EXP_PATH + c.getPackageName();
-        File obb = c.getObbDir();
-        Log.i("getSaveFilePath", path + "\n" + obb.toString());
-        return path;
+    public static String getObbFilesDirAbsolutePath(Context c) {
+        File obbFilesPath = c.getObbDir();
+        return obbFilesPath.getAbsolutePath();
     }
 
     /**
@@ -238,7 +231,7 @@ public class Helpers {
             boolean deleteFileOnMismatch) {
         // the file may have been delivered by Market --- let's make sure
         // it's the size we expect
-        File fileForNewFile = new File(Helpers.generateSaveFileName(c, fileName));
+        File fileForNewFile = new File(Helpers.generateObbFileAbsolutePath(c, fileName));
         if (fileForNewFile.exists()) {
             if (fileForNewFile.length() == fileSize) {
                 return true;

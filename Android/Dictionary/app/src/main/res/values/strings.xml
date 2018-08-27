@@ -8,13 +8,15 @@
     <string name="text_paused_cellular_2">If you choose not to enable downloading over cellular connections, the download will automatically resume when wi-fi is available.</string>
     <string name="text_button_resume_cellular">Resume download</string>
     <string name="text_button_wifi_settings">Wi-Fi settings</string>
-    <string name="text_verifying_download">Verifying Download</string>
-    <string name="text_validation_complete">XAPK File Validation Complete.  Select OK to exit.</string>
-    <string name="text_validation_failed">XAPK File Validation Failed.</string>
+    <string name="text_unpacking_database_file">Unpacking the database file…</string>
+    <string name="text_unpacking_complete">Database file unpacking complete. Select OK to exit.</string>
+    <string name="text_unpacking_failed">Database file unpacking failed.</string>
     <string name="text_button_pause">Pause Download</string>
     <string name="text_button_resume">Resume Download</string>
     <string name="text_button_cancel">Cancel</string>
-    <string name="text_button_cancel_verify">Cancel Verification</string>
+    <string name="text_button_try_again">Try Again</string>
+    <string name="text_button_cancel_unpacking">Cancel Unpacking</string>
+
     <string name="whole_word_app_bar_menu_item">Whole Word</string>
     <string name="case_sensitive_app_bar_menu_item">Case Sensitive</string>
     <string name="search_to_end_app_bar_menu_item">Search End</string>
@@ -23,4 +25,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="support_email">Write us a e-mail: dictionarylab@gmail.com</string>
+    <string name="storage_not_found_title">Storage not found</string>
+    <string name="storage_not_found_message">Mount the sd card or move the app to internal storage</string>
+    <string name="ok_str">Ok</string>
 </resources>

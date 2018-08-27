@@ -27,12 +27,6 @@ public class Constants {
     /** Tag used for debugging/logging */
     public static final String TAG = "LVLDL";
 
-    /**
-     * Expansion path where we store obb files
-     */
-    public static final String EXP_PATH = File.separator + "Android"
-            + File.separator + "obb" + File.separator;
-    
     /** The intent that gets sent when the service must wake up for a retry */
     public static final String ACTION_RETRY = "android.intent.action.DOWNLOAD_WAKEUP";
 

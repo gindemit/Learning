@@ -363,7 +363,7 @@ public class DownloadThread {
     private void finalizeDestinationFile(State state) throws StopRequest {
         syncDestination(state);
         String tempFilename = state.mFilename;
-        String finalFilename = Helpers.generateSaveFileName(mService, mInfo.mFileName);
+        String finalFilename = Helpers.generateObbFileAbsolutePath(mService, mInfo.mFileName);
         if (!state.mFilename.equals(finalFilename)) {
             File startFile = new File(tempFilename);
             File destFile = new File(finalFilename);
@@ -621,7 +621,7 @@ public class DownloadThread {
             state.mStream = new FileOutputStream(state.mFilename);
         } catch (FileNotFoundException exc) {
             // make sure the directory exists
-            File pathFile = new File(Helpers.getSaveFilePath(mService));
+            File pathFile = new File(Helpers.getObbFilesDirAbsolutePath(mService));
             try {
                 if (pathFile.mkdirs()) {
                     state.mStream = new FileOutputStream(state.mFilename);
