@@ -1,0 +1,13 @@
+LIKE 'Test' 3
+LIKE 'Test%' 22
+LIKE '%Test' 13797
+LIKE 'test' 1
+LIKE 'test%' 19
+= 'Test' 0
+= 'test' 0
+
+
+LIKE 'Änderung' 285
+LIKE 'Änderung' 346
+LIKE '%Änderung' 1255
+LIKE 'änderung' 270

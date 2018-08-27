@@ -6,7 +6,7 @@ namespace DotNetCoreProject.NewDbFormat
 {
     internal class WordTranslator
     {
-        RuDeDictContext mDb;
+        private readonly RuDeDictContext mDb;
 
         public WordTranslator(RuDeDictContext db)
         {

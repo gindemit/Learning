@@ -13,7 +13,7 @@ namespace DotNetCoreProject
 
             using (var db = new Model.New.RuDeDictContext())
             {
-                NewDbFormat.WordTranslator translator = new NewDbFormat.WordTranslator(db);
+                NewDbFormat.DudenWordChecker translator = new NewDbFormat.DudenWordChecker(db);
                 do
                 {
                     Console.WriteLine("Enter word to translate");
@@ -22,7 +22,7 @@ namespace DotNetCoreProject
                     {
                         break;
                     }
-                    translator.PrintTranslationToConsole(input);
+                    translator.CheckWord(input);
                 }
                 while (true);
             }
