@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS wordCategory (
 	-- FOREIGN KEY (idCategoryName) REFERENCES categoryName(idCategoryName)
 );
 
+UPDATE word SET name=DEFLATE(name) WHERE idWord=10000
+
 CREATE TABLE IF NOT EXISTS categoryWord (
 	idWord INTEGER,
 	idCategory INTEGER,
@@ -35,11 +37,18 @@ CREATE TABLE IF NOT EXISTS categoryWord (
 	-- FOREIGN KEY (idCategory) REFERENCES wordCategory(idCategory)
 ) WITHOUT ROWID;
 
-CREATE INDEX wordNameIndex ON word(name);
+CREATE INDEX wordNameIndexNoCase ON word(name COLLATE NOCASE);
+-- CREATE INDEX wordNameIndexNoCase2 ON word(LOWER(name));
+-- CREATE INDEX wordNameIndex ON word(name);
 CREATE INDEX wordCategoryIdWordIndex ON wordCategory(idWord);
 CREATE INDEX categoryWordIdCategoryIndex ON categoryWord(idCategory);
+
 DROP INDEX categoryWordIdWordIndex;
 
+
+EXPLAIN QUERY PLAN 
+SELECT name FROM word WHERE name LIKE 'Änderung'
+INDEXED BY wordNameIndexNoCase
 
 SELECT w.id, w.name, w.deel, cw.Omschrijving FROM categorywoord cw JOIN woord w on cw.idWoord=w.id where length(cw.Omschrijving) > 0 AND instr(w.deel, cw.Omschrijving) > 0 LIMIT 100
 SELECT count(*), w.id, w.name, w.deel, cw.Omschrijving, cw.vooromschrijving FROM categorywoord cw JOIN woord w on cw.idWoord=w.id where w.deel LIKE ' нареч.%'
@@ -68,7 +77,9 @@ FROM
 )
 JOIN word w ON w.idWord=translatedId
 
-	
+SELECT toTranslateWordName,	translatedCategoryName,	w.Name,	w.partGenus, w.plural, translatedDefinition, translatedDescription FROM ( SELECT w.name AS toTranslateWordName, cw.idWord AS translatedId, cw.definition AS translatedDefinition, cw.description AS translatedDescription, cn.name AS translatedCategoryName FROM word w INDEXED BY wordNameIndexNoCase JOIN wordCategory wc ON w.idWord=wc.idWord JOIN categoryWord cw ON cw.idCategory=wc.idCategory JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName WHERE w.name LIKE 'änderung' ) JOIN word  w ON w.idWord=translatedId  
 
-	
+
+
+SELECT name FROM word WHERE name >= 'änderung' AND name <  'änderunh'
 	

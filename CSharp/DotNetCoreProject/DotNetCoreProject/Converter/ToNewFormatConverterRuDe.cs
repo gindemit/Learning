@@ -1,35 +1,18 @@
 ﻿using System.Linq;
+using DotNetCoreProject.Shared;
 using Old = DotNetCoreProject.Model;
 using New = DotNetCoreProject.Model.New;
 
 
-namespace DotNetCoreProject
+namespace DotNetCoreProject.Converter
 {
-    internal enum PartGenus : byte
-    {
-        NoValue = 0,
-        NounFeminine,
-        NounMasculine,
-        NounNeuter,
-        Noun,
-        Verb,
-        Adjective,
-        Adverb,
-        Abbreviation,
-        Preposition,
-        Pronoun,
-        Interjection,
-        Joinder,
-        Numeral
-    }
-
-    internal sealed class ToNewFormatConverter
+    internal sealed class ToNewFormatConverterRuDe
     {
         private readonly Old.RussianGermanDictionaryContext mOldDb;
         private New.RuDeDictContext mNewDb;
-        private readonly Cipher mCipher = new Cipher();
+        private readonly OldDbFormat.Cipher mCipher = new OldDbFormat.Cipher();
 
-        public ToNewFormatConverter(Old.RussianGermanDictionaryContext oldDb, New.RuDeDictContext newDb)
+        public ToNewFormatConverterRuDe(Old.RussianGermanDictionaryContext oldDb, New.RuDeDictContext newDb)
         {
             mOldDb = oldDb;
             mNewDb = newDb;

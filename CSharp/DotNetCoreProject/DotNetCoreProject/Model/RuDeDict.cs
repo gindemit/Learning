@@ -7,7 +7,6 @@ namespace DotNetCoreProject.Model.New
     public sealed class RuDeDictContext : DbContext
     {
         public DbSet<AndroidMetaData> AndroidMetaDatas { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryName> CategoryNames { get; set; }
         public DbSet<CategoryWord> CategoryWords { get; set; }
         public DbSet<Word> Words { get; set; }

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using DotNetCoreProject.Model;
+using System.Threading;
+using System.Globalization;
 
 namespace DotNetCoreProject
 {
@@ -9,9 +8,12 @@ namespace DotNetCoreProject
     {
         static void Main(string[] args)
         {
-            using (var db = new RussianGermanDictionaryContext())
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+
+            using (var db = new Model.New.RuDeDictContext())
             {
-                WordTranslator translator = new WordTranslator(db);
+                NewDbFormat.WordTranslator translator = new NewDbFormat.WordTranslator(db);
                 do
                 {
                     Console.WriteLine("Enter word to translate");

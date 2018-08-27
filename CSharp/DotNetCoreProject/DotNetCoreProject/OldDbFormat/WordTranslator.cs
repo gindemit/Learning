@@ -2,7 +2,7 @@
 using System.Linq;
 using DotNetCoreProject.Model;
 
-namespace DotNetCoreProject
+namespace DotNetCoreProject.OldDbFormat
 {
     internal class WordTranslator
     {
