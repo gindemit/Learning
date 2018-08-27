@@ -11,11 +11,34 @@
                         UnityEditor.PackageManager.UI ../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-	<engine:VisualElement class="noWrap">
-		<engine:Box text="Box" class="flexBasisGrowShrink"/>
-		<engine:Box text="Box" class="flexBasisGrowShrink"/>
-		<engine:Box text="Box" class="flexBasisGrowShrink2"/>
-		<engine:Box text="Box" class="flexBasisGrowShrink"/>
-		<engine:Box text="Box" class="flexBasisGrowShrink"/>
+	<engine:VisualElement class="rootClass">
+		<engine:VisualElement class="wrap">
+			<engine:VisualElement name="Box0" class="flexBasisGrowShrink"/>
+			<engine:VisualElement name="Box1" class="flexBasisGrowShrink"/>
+			<engine:VisualElement name="Box2" class="flexBasisGrowShrink2"/>
+			<engine:VisualElement name="Box3" class="flexBasisGrowShrink"/>
+			<engine:VisualElement name="Box4" class="flexBasisGrowShrink"/>
+		</engine:VisualElement>
+		<engine:VisualElement class="wrapCenter">
+			<engine:VisualElement name="Box5" class="fixedBox"/>
+			<engine:VisualElement name="Box6" class="fixedBox"/>
+			<engine:VisualElement name="Box7" class="fixedBox"/>
+			<engine:VisualElement name="Box8" class="fixedBox"/>
+			<engine:VisualElement name="Box9" class="fixedBox"/>
+		</engine:VisualElement>
+		<engine:VisualElement class="wrapSpaceBetween">
+			<engine:VisualElement name="Box10" class="fixedBox"/>
+			<engine:VisualElement name="Box11" class="fixedBox"/>
+			<engine:VisualElement name="Box12" class="fixedBox"/>
+			<engine:VisualElement name="Box13" class="fixedBox"/>
+			<engine:VisualElement name="Box14" class="fixedBox"/>
+		</engine:VisualElement>
+		<engine:VisualElement class="wrapSpaceAround">
+			<engine:VisualElement name="Box15" class="fixedBox"/>
+			<engine:VisualElement name="Box16" class="fixedBox"/>
+			<engine:VisualElement name="Box17" class="fixedBox"/>
+			<engine:VisualElement name="Box18" class="fixedBox"/>
+			<engine:VisualElement name="Box19" class="fixedBox"/>
+		</engine:VisualElement>
 	</engine:VisualElement>
 </engine:UXML>

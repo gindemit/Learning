@@ -67,12 +67,30 @@
 	visibility : visible;
 }
 
-.noWrap {
-	min-height : 300;
-	min-width : 300;
+.wrap {
 	flex-wrap : wrap;
 	flex-direction : row;
-	background-color : rgba(220, 0, 0, 0.4);
+}
+
+.wrapCenter {
+	flex-wrap : wrap;
+	flex-direction : row;
+	justify-content : Center
+	background-color : rgba(0, 220, 0, 0.4);
+}
+
+.wrapSpaceBetween {
+	flex-wrap : wrap;
+	flex-direction : row;
+	justify-content : SpaceBetween
+	background-color : rgba(0, 220, 0, 0.4);
+}
+
+.wrapSpaceAround {
+	flex-wrap : wrap;
+	flex-direction : row;
+	justify-content : SpaceAround
+	background-color : rgba(0, 220, 0, 0.4);
 }
 
 .flexBasisGrowShrink {
@@ -80,13 +98,30 @@
 	width : 100;
 	flex-grow : 1;
 	flex-shrink : 1;
-	background-color : rgba(0, 0, 220, 0.6);
+	margin-top : 2;
+	margin-left : 2;
+	margin-bottom : 2;
+	margin-right : 2;
+	background-color : rgba(220, 0, 0, 0.4);
 }
 .flexBasisGrowShrink2 {
 	height : 100;
 	width : 100;
-	flex-grow : 1;
+	flex-grow : 3;
 	flex-shrink : 0.1;
+	margin-top : 2;
+	margin-left : 2;
+	margin-bottom : 2;
+	margin-right : 2;
+	background-color : rgba(220, 0, 0, 0.4);
+}
+.fixedBox {
+	height : 100;
+	width : 100;
+	margin-top : 2;
+	margin-left : 2;
+	margin-bottom : 2;
+	margin-right : 2;
 	background-color : rgba(0, 0, 220, 0.6);
 }
 
@@ -136,7 +171,7 @@
 {"background-size", StylePropertyID.BackgroundSize},
 {"align-items", StylePropertyID.AlignItems},Auto,FlexStart,Center,FlexEnd,Stretch
 {"align-content", StylePropertyID.AlignContent},Auto,FlexStart,Center,FlexEnd,Stretch
-{"justify-content", StylePropertyID.JustifyContent},
+{"justify-content", StylePropertyID.JustifyContent},FlexStart, Center, FlexEnd, SpaceBetween, SpaceAround
 {"border-left-width", StylePropertyID.BorderLeftWidth},
 {"border-top-width", StylePropertyID.BorderTopWidth},
 {"border-right-width", StylePropertyID.BorderRightWidth},
@@ -154,3 +189,64 @@
 {"cursor", StylePropertyID.Cursor},
 {"visibility", StylePropertyID.Visibility},Visible, Hidden
 */
+
+#Box0 {
+	background-color : rgba(239, 83, 80, 1);
+}
+#Box1 {
+	background-color : rgba(244, 67, 54, 1);
+}
+#Box2 {
+	background-color : rgba(229, 57, 53, 1);
+}
+#Box3 {
+	background-color : rgba(211, 47, 47, 1);
+}
+#Box4 {
+	background-color : rgba(183, 28, 28, 1);
+}
+#Box5 {
+	background-color : rgba(236, 64, 122, 1);
+}
+#Box6 {
+	background-color : rgba(233, 30, 99, 1);
+}
+#Box7 {
+	background-color : rgba(216, 27, 96, 1);
+}
+#Box8 {
+	background-color : rgba(194, 24, 91, 1);
+}
+#Box9 {
+	background-color : rgba(136, 14, 79, 1);
+}
+#Box10 {
+	background-color : rgba(171, 71, 188, 1);
+}
+#Box11 {
+	background-color : rgba(156, 39, 176, 1);
+}
+#Box12 {
+	background-color : rgba(142, 36, 170, 1);
+}
+#Box13 {
+	background-color : rgba(123, 31, 162, 1);
+}
+#Box14 {
+	background-color : rgba(74, 20, 140, 1);
+}
+#Box15 {
+	background-color : rgba(126, 87, 194, 1);
+}
+#Box16 {
+	background-color : rgba(103, 58, 183, 1);
+}
+#Box17 {
+	background-color : rgba(94, 53, 177, 1);
+}
+#Box18 {
+	background-color : rgba(81, 45, 168, 1);
+}
+#Box19 {
+	background-color : rgba(49, 27, 146, 1);
+}
