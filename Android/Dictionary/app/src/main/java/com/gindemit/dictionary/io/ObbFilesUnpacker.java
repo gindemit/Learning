@@ -23,14 +23,17 @@ import java.util.zip.ZipInputStream;
 import static android.content.Context.STORAGE_SERVICE;
 
 public class ObbFilesUnpacker {
+    public static final long UNPACKED_OBB_FILE_SIZE = 178192384;
+    private static final String LOG_TAG = "ObbFilesUnpacker";
     private static final float SMOOTHING_FACTOR = 0.005f;
     private static final String PACKED_OBB_FILE_NAME = "ru_de_dict.zip";
     private static final String UNPACKED_OBB_FILE_NAME = "ru_de_dict.db";
 
-    private final IObbFilesCheckerClient mClient;
-    private boolean mCancelUnpacking;
+    private final IObbFilesUnpackerClient mClient;
+    private boolean mCancelUnpacking = false;
+    private boolean mUnpackingInProgress = false;
 
-    public ObbFilesUnpacker(IObbFilesCheckerClient client) {
+    public ObbFilesUnpacker(IObbFilesUnpackerClient client) {
         mClient = client;
     }
 
@@ -76,7 +79,33 @@ public class ObbFilesUnpacker {
         return false;
     }
 
+    public static boolean unpackIsNecessary(Context context) {
+        File unpackedDatabaseFilePath = context.getExternalFilesDir("database");
+        File file = new File(unpackedDatabaseFilePath, UNPACKED_OBB_FILE_NAME);
+        try {
+            InputStream is = new FileInputStream(file);
+            is.read();
+            if (UNPACKED_OBB_FILE_SIZE != file.length()) {
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            Log.w("ExternalStorage", "Error writing " + file, e);
+            return true;
+        }
+    }
+
+    public void cancelUnpacking() {
+        this.mCancelUnpacking = true;
+    }
+
     public void unpackObbZipFiles() {
+        if (mUnpackingInProgress) {
+            Log.d(LOG_TAG, "Unpacking already started");
+            return;
+        }
+        mUnpackingInProgress = true;
+
         for (ObbFile obbFile : obbFiles) {
             String obbFileName = Helpers.getExpansionAPKFileName(
                     mClient.getContext(),
@@ -87,7 +116,7 @@ public class ObbFilesUnpacker {
                     obbFileName,
                     obbFile.FileSize,
                     false)) {
-                mClient.onPostCheck(false);
+                mClient.onPostUnpack(false);
                 return;
             }
             final String outputDirPath = mClient.getContext().getExternalFilesDir("database").getAbsolutePath();
@@ -95,12 +124,21 @@ public class ObbFilesUnpacker {
             final StorageManager storageManager = (StorageManager) mClient.getContext().getSystemService(STORAGE_SERVICE);
             final ObbFilesUnpacker self = this;
 
-            OnObbStateChangeListener obbStateChangeListener = new OnObbStateChangeListener() {
-                public void onObbStateChange(String path, int state) {
-                    self.onObbStateChange(path, state, storageManager, outputDirPath);
-                }
-            };
-            storageManager.mountObb(obbFileAbsolutePath, "1qazxsw2", obbStateChangeListener);
+            if (storageManager.isObbMounted(obbFileAbsolutePath)) {
+                onObbStateChange(
+                        storageManager.getMountedObbPath(obbFileAbsolutePath),
+                        OnObbStateChangeListener.MOUNTED,
+                        storageManager,
+                        outputDirPath);
+            }
+            else {
+                OnObbStateChangeListener obbStateChangeListener = new OnObbStateChangeListener() {
+                    public void onObbStateChange(String path, int state) {
+                        self.onObbStateChange(path, state, storageManager, outputDirPath);
+                    }
+                };
+                storageManager.mountObb(obbFileAbsolutePath, "1qazxsw2", obbStateChangeListener);
+            }
         }
     }
 
@@ -108,7 +146,7 @@ public class ObbFilesUnpacker {
         if (state == OnObbStateChangeListener.ERROR_COULD_NOT_MOUNT ||
                 state == OnObbStateChangeListener.ERROR_INTERNAL ||
                 state == OnObbStateChangeListener.ERROR_PERMISSION_DENIED ) {
-            mClient.onPostCheck(false);
+            mClient.onPostUnpack(false);
             return;
         }
         if (state == OnObbStateChangeListener.ERROR_ALREADY_MOUNTED) {
@@ -118,11 +156,15 @@ public class ObbFilesUnpacker {
                     super.onObbStateChange(path, state);
                 }
             });
-            mClient.onPostCheck(false);
+            mClient.onPostUnpack(false);
+            return;
+        }
+        if (obbPath == null) {
+            Log.e(LOG_TAG, "onObbStateChangeCallback returned obbPath is null");
             return;
         }
         if (!storageManager.isObbMounted(obbPath)) {
-            mClient.onPostCheck(false);
+            mClient.onPostUnpack(false);
             return;
         }
 
@@ -130,7 +172,7 @@ public class ObbFilesUnpacker {
 
             @Override
             protected void onPreExecute() {
-                mClient.onPreCheck();
+                mClient.onPreUnpack();
                 super.onPreExecute();
             }
 
@@ -163,7 +205,9 @@ public class ObbFilesUnpacker {
                         }
 
                         long startTime = SystemClock.uptimeMillis();
-                        FileOutputStream fout = new FileOutputStream(new File(asynkTaskData.OutputDirPath, filename));
+                        FileOutputStream fout = new FileOutputStream(
+                                new File(asynkTaskData.OutputDirPath, filename),
+                                false);
                         while ((count = zis.read(buffer)) != -1) {
                             fout.write(buffer, 0, count);
 
@@ -213,40 +257,24 @@ public class ObbFilesUnpacker {
 
             @Override
             protected void onProgressUpdate(DownloadProgressInfo... values) {
-                mClient.onCheckProgress(values[0]);
+                mClient.onUnpackProgress(values[0]);
                 super.onProgressUpdate(values);
             }
 
             @Override
-            protected void onPostExecute(Boolean result) {
+            protected void onPostExecute(final Boolean result) {
+                mUnpackingInProgress = false;
+                mCancelUnpacking = false;
                 storageManager.unmountObb(obbPath, false, new OnObbStateChangeListener() {
                     @Override
                     public void onObbStateChange(String path, int state) {
                         super.onObbStateChange(path, state);
+                        mClient.onPostUnpack(result);
                     }
                 });
-                mClient.onPostCheck(result);
                 super.onPostExecute(result);
             }
-
         };
         validationTask.execute(new AsynkTaskData(storageManager, outputDirPath, obbPath));
-    }
-
-    public static boolean unpackIsNecessary(Context context) {
-        File unpackedDatabaseFilePath = context.getExternalFilesDir("database");
-        File file = new File(unpackedDatabaseFilePath, UNPACKED_OBB_FILE_NAME);
-        try {
-            InputStream is = new FileInputStream(file);
-            is.read();
-            return false;
-        } catch (IOException e) {
-            Log.w("ExternalStorage", "Error writing " + file, e);
-            return true;
-        }
-    }
-
-    public void CancelUnpacking() {
-        this.mCancelUnpacking = true;
     }
 }

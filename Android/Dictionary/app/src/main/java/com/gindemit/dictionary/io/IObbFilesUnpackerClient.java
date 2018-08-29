@@ -3,9 +3,9 @@ package com.gindemit.dictionary.io;
 import android.content.Context;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 
-public interface IObbFilesCheckerClient {
+public interface IObbFilesUnpackerClient {
     Context getContext();
-    void onPreCheck();
-    void onCheckProgress(DownloadProgressInfo progress);
-    void onPostCheck(boolean result);
+    void onPreUnpack();
+    void onUnpackProgress(DownloadProgressInfo progress);
+    void onPostUnpack(boolean result);
 }

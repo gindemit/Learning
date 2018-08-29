@@ -55,11 +55,9 @@
         </activity>
 
         <service android:name=".services.ObbDownloadService" />
-
+        <service android:name=".services.ObbUnpackService" />
         <receiver android:name=".broadcast_receivers.ObbAlarmReceiver" />
-
         <activity android:name=".activities.ObbDownloadAndUnpackActivity" />
-        <activity android:name=".activities.ObbUnpackActivity"></activity>
     </application>
 
 </manifest>

@@ -38,21 +38,15 @@ import android.os.RemoteException;
  */
 public class DownloaderServiceMarshaller {
 
-    public static final int MSG_REQUEST_ABORT_DOWNLOAD =
-            1;
-    public static final int MSG_REQUEST_PAUSE_DOWNLOAD =
-            2;
-    public static final int MSG_SET_DOWNLOAD_FLAGS =
-            3;
-    public static final int MSG_REQUEST_CONTINUE_DOWNLOAD =
-            4;
-    public static final int MSG_REQUEST_DOWNLOAD_STATE =
-            5;
-    public static final int MSG_REQUEST_CLIENT_UPDATE =
-            6;
+    static final int MSG_REQUEST_ABORT_DOWNLOAD = 1;
+    static final int MSG_REQUEST_PAUSE_DOWNLOAD = 2;
+    static final int MSG_SET_DOWNLOAD_FLAGS = 3;
+    static final int MSG_REQUEST_CONTINUE_DOWNLOAD = 4;
+    static final int MSG_REQUEST_DOWNLOAD_STATE = 5;
+    static final int MSG_REQUEST_CLIENT_UPDATE = 6;
 
-    public static final String PARAMS_FLAGS = "flags";
-    public static final String PARAM_MESSENGER = DownloaderService.EXTRA_MESSAGE_HANDLER;
+    static final String PARAMS_FLAGS = "flags";
+    static final String PARAM_MESSENGER = DownloaderService.EXTRA_MESSAGE_HANDLER;
 
     private static class Proxy implements IDownloaderService {
         private Messenger mMsg;
@@ -67,7 +61,7 @@ public class DownloaderServiceMarshaller {
             }
         }
 
-        public Proxy(Messenger msg) {
+        Proxy(Messenger msg) {
             mMsg = msg;
         }
 
@@ -107,36 +101,37 @@ public class DownloaderServiceMarshaller {
     }
 
     private static class Stub implements IStub {
-        private IDownloaderService mItf = null;
+        private final IDownloaderService mDownloaderService;
+
         final Messenger mMessenger = new Messenger(new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case MSG_REQUEST_ABORT_DOWNLOAD:
-                        mItf.requestAbortDownload();
+                        mDownloaderService.requestAbortDownload();
                         break;
                     case MSG_REQUEST_CONTINUE_DOWNLOAD:
-                        mItf.requestContinueDownload();
+                        mDownloaderService.requestContinueDownload();
                         break;
                     case MSG_REQUEST_PAUSE_DOWNLOAD:
-                        mItf.requestPauseDownload();
+                        mDownloaderService.requestPauseDownload();
                         break;
                     case MSG_SET_DOWNLOAD_FLAGS:
-                        mItf.setDownloadFlags(msg.getData().getInt(PARAMS_FLAGS));
+                        mDownloaderService.setDownloadFlags(msg.getData().getInt(PARAMS_FLAGS));
                         break;
                     case MSG_REQUEST_DOWNLOAD_STATE:
-                        mItf.requestDownloadStatus();
+                        mDownloaderService.requestDownloadStatus();
                         break;
                     case MSG_REQUEST_CLIENT_UPDATE:
-                        mItf.onClientUpdated((Messenger) msg.getData().getParcelable(
+                        mDownloaderService.onClientUpdated((Messenger) msg.getData().getParcelable(
                                 PARAM_MESSENGER));
                         break;
                 }
             }
         });
 
-        public Stub(IDownloaderService itf) {
-            mItf = itf;
+        Stub(IDownloaderService itf) {
+            mDownloaderService = itf;
         }
 
         @Override

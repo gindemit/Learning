@@ -390,12 +390,6 @@ public abstract class DownloaderService extends CustomIntentService implements I
      */
     private static boolean sIsRunning;
 
-    @Override
-    public IBinder onBind(Intent paramIntent) {
-        Log.d(Constants.TAG, "Service Bound");
-        return this.mServiceMessenger.getBinder();
-    }
-
     /**
      * Network state.
      */
@@ -438,9 +432,9 @@ public abstract class DownloaderService extends CustomIntentService implements I
     /**
      * Used for calculating time remaining and speed
      */
-    long mBytesAtSample;
-    long mMillisecondsAtSample;
-    float mAverageDownloadSpeed;
+    private long mBytesAtSample;
+    private long mMillisecondsAtSample;
+    private float mAverageDownloadSpeed;
 
     /**
      * Our binding to the network state broadcasts
@@ -453,6 +447,11 @@ public abstract class DownloaderService extends CustomIntentService implements I
     private PendingIntent mPendingIntent;
     private PendingIntent mAlarmIntent;
 
+    @Override
+    public IBinder onBind(Intent paramIntent) {
+        Log.d(Constants.TAG, "Service Bound");
+        return this.mServiceMessenger.getBinder();
+    }
     /**
      * Updates the network type based upon the type and subtype returned from
      * the connectivity manager. Subtype is only used for cellular signals.

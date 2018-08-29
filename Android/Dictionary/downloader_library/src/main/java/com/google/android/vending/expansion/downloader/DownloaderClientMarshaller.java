@@ -158,8 +158,7 @@ public class DownloaderClientMarshaller {
                 // service using a Messenger, so here we get a client-side
                 // representation of that from the raw IBinder object.
                 mServiceMessenger = new Messenger(service);
-                mItf.onServiceConnected(
-                        mServiceMessenger);
+                mItf.onServiceConnected(mServiceMessenger);
             }
 
             public void onServiceDisconnected(ComponentName className) {
@@ -251,8 +250,7 @@ public class DownloaderClientMarshaller {
     public static int startDownloadServiceIfRequired(Context context, PendingIntent notificationClient, 
             Class<?> serviceClass)
             throws NameNotFoundException {
-        return DownloaderService.startDownloadServiceIfRequired(context, notificationClient,
-                serviceClass);
+        return DownloaderService.startDownloadServiceIfRequired(context, notificationClient, serviceClass);
     }
     
     /**

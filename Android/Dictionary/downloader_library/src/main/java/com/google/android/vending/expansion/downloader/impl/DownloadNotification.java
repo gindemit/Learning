@@ -47,7 +47,7 @@ public class DownloadNotification implements IDownloaderClient {
     private String mCurrentTitle;
 
     private IDownloaderClient mClientProxy;
-    final ICustomNotification mCustomNotification;
+    private final ICustomNotification mCustomNotification;
     private Notification mNotification;
     private Notification mCurrentNotification;
     private CharSequence mLabel;
@@ -55,8 +55,8 @@ public class DownloadNotification implements IDownloaderClient {
     private PendingIntent mContentIntent;
     private DownloadProgressInfo mProgressInfo;
 
-    static final String LOGTAG = "DownloadNotification";
-    static final int NOTIFICATION_ID = LOGTAG.hashCode();
+    private static final String LOGTAG = "DownloadNotification";
+    private static final int NOTIFICATION_ID = LOGTAG.hashCode();
 
     public PendingIntent getClientIntent() {
         return mContentIntent;

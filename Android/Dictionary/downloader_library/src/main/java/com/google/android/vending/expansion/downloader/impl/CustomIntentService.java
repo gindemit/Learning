@@ -36,7 +36,7 @@ public abstract class CustomIntentService extends Service {
     private boolean mRedelivery;
     private volatile ServiceHandler mServiceHandler;
     private volatile Looper mServiceLooper;
-    private static final String LOG_TAG = "CancellableIntentService";
+    private static final String LOG_TAG = "CustomIntentService";
     private static final int WHAT_MESSAGE = -10;
 
     public CustomIntentService(String paramString) {
@@ -61,7 +61,7 @@ public abstract class CustomIntentService extends Service {
     @Override
     public void onDestroy() {
         Thread localThread = this.mServiceLooper.getThread();
-        if ((localThread != null) && (localThread.isAlive())) {
+        if (localThread.isAlive()) {
             localThread.interrupt();
         }
         this.mServiceLooper.quit();
@@ -73,7 +73,7 @@ public abstract class CustomIntentService extends Service {
     protected abstract boolean shouldStop();
 
     @Override
-    public void onStart(Intent paramIntent, int startId) {
+    public int onStartCommand(Intent paramIntent, int flags, int startId) {
         if (!this.mServiceHandler.hasMessages(WHAT_MESSAGE)) {
             Message localMessage = this.mServiceHandler.obtainMessage();
             localMessage.arg1 = startId;
@@ -81,11 +81,6 @@ public abstract class CustomIntentService extends Service {
             localMessage.what = WHAT_MESSAGE;
             this.mServiceHandler.sendMessage(localMessage);
         }
-    }
-
-    @Override
-    public int onStartCommand(Intent paramIntent, int flags, int startId) {
-        onStart(paramIntent, startId);
         return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;
     }
 
