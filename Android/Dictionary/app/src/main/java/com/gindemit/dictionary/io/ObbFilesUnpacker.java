@@ -27,6 +27,7 @@ public class ObbFilesUnpacker {
     private static final String LOG_TAG = "ObbFilesUnpacker";
     private static final float SMOOTHING_FACTOR = 0.005f;
     private static final String PACKED_OBB_FILE_NAME = "ru_de_dict.zip";
+    static final String UNPACKED_OBB_FILE_DIR_NAME = "database";
     private static final String UNPACKED_OBB_FILE_NAME = "ru_de_dict.db";
 
     private final IObbFilesUnpackerClient mClient;
@@ -80,7 +81,7 @@ public class ObbFilesUnpacker {
     }
 
     public static boolean unpackIsNecessary(Context context) {
-        File unpackedDatabaseFilePath = context.getExternalFilesDir("database");
+        File unpackedDatabaseFilePath = context.getExternalFilesDir(UNPACKED_OBB_FILE_DIR_NAME);
         File file = new File(unpackedDatabaseFilePath, UNPACKED_OBB_FILE_NAME);
         try {
             InputStream is = new FileInputStream(file);
@@ -119,7 +120,7 @@ public class ObbFilesUnpacker {
                 mClient.onPostUnpack(false);
                 return;
             }
-            final String outputDirPath = mClient.getContext().getExternalFilesDir("database").getAbsolutePath();
+            final String outputDirPath = mClient.getContext().getExternalFilesDir(UNPACKED_OBB_FILE_DIR_NAME).getAbsolutePath();
             final String obbFileAbsolutePath = Helpers.generateObbFileAbsolutePath(mClient.getContext(), obbFileName);
             final StorageManager storageManager = (StorageManager) mClient.getContext().getSystemService(STORAGE_SERVICE);
             final ObbFilesUnpacker self = this;

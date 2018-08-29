@@ -1,9 +1,10 @@
 package com.gindemit.dictionary.fragments.search;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,47 +13,15 @@ import android.view.ViewGroup;
 
 import com.gindemit.dictionary.R;
 import com.gindemit.dictionary.fragments.IOnListFragmentInteractionListener;
-import com.gindemit.dictionary.fragments.search.dummy.DummyContent;
-import com.gindemit.dictionary.fragments.search.dummy.DummyContent.DummyItem;
+import com.gindemit.dictionary.io.SQLiteOpenHelper;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link IOnListFragmentInteractionListener}
- * interface.
- */
 public class SearchPageFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
     private IOnListFragmentInteractionListener mListener;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public SearchPageFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static SearchPageFragment newInstance(int columnCount) {
-        SearchPageFragment fragment = new SearchPageFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -64,12 +33,17 @@ public class SearchPageFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MySearchItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+            SQLiteOpenHelper sqLiteOpenHelper = new SQLiteOpenHelper(
+                    this.getContext(), "client.db");
+
+            SQLiteDatabase sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
+            String query = "SELECT * FROM word ORDER BY name ASC"; // No trailing ';'
+            Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+
+            recyclerView.setAdapter(new MySearchItemRecyclerViewAdapter(context, cursor));
         }
         return view;
     }
