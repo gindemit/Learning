@@ -1,0 +1,216 @@
+-- New db format --
+
+-- Select all rows that are empty
+SELECT idWord FROM word WHERE name='';
+
+-- Delete all empty entries in word.
+DELETE FROM word WHERE name='';
+
+-- Select bad words
+SELECT 
+	w.name,
+	w.idword,
+	cw.idCategory
+FROM word w
+	JOIN categoryWord cw ON cw.idWord=w.idWord
+WHERE w.idWord IN (
+	SELECT idWord 
+	FROM word 
+	WHERE 
+		name IN (
+			SELECT name FROM mat.filter
+		)
+	);
+	
+-- Count all entries in wordCategory that have no word in word table
+SELECT 
+	count(*)
+FROM
+	wordCategory
+WHERE idWord NOT IN
+	(SELECT idWord FROM word);
+
+-- Count all entries in categoryWord that have no word in word table
+SELECT 
+	count(*)
+FROM
+	categoryWord
+WHERE idWord NOT IN
+	(SELECT idWord FROM word);
+	
+
+SELECT 
+	w.idword,
+	wc.idCategory
+FROM word w
+	JOIN wordCategory wc ON wc.idWord=w.idWord
+WHERE w.name='';
+
+SELECT toTranslateWordId, toTranslateWordName,	translatedCategoryName,	w.Name,	w.partGenus, w.plural, translatedDefinition, translatedDescription FROM ( SELECT w.idWord AS toTranslateWordId, w.name AS toTranslateWordName, cw.idWord AS translatedId, cw.definition AS translatedDefinition, cw.description AS translatedDescription, cn.name AS translatedCategoryName FROM word w JOIN wordCategory wc ON w.idWord=wc.idWord JOIN categoryWord cw ON cw.idCategory=wc.idCategory JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName WHERE w.name='') JOIN word  w ON w.idWord=translatedId;
+
+
+EXPLAIN QUERY PLAN 
+SELECT name FROM word WHERE name LIKE 'Änderung'
+INDEXED BY wordNameIndexNoCase
+
+SELECT idCategory
+FROM categoryWord
+WHERE idWord IN (
+	SELECT
+		idWord
+	FROM word
+	WHERE idWord IN
+	(
+		SELECT 
+			cw.idWord AS translatedId
+		FROM word w
+			JOIN wordCategory wc ON w.idWord=wc.idWord
+			JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+			JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName
+		WHERE w.idWord IN (
+			SELECT idWord 
+			FROM word 
+			WHERE 
+				name IN (
+					SELECT name FROM mat.filter
+				)
+		)
+	)
+);
+
+
+
+-- Count duplicated words
+SELECT
+	COUNT(*)
+FROM (
+	SELECT
+		idWord,
+		name,
+		count(*) c
+	FROM
+		word
+	GROUP BY
+		name
+	HAVING
+		c > 1
+);
+
+SELECT
+	wc.idCategory,
+	wc.idWord,
+	idWordZeroPartGenus,
+	w.idWord AS idWordNonZero
+FROM (
+	SELECT
+		idWord AS idWordZeroPartGenus,
+		name AS nameZeroPartGenus
+	FROM
+		word
+	GROUP BY
+		name
+	HAVING
+		count(*) > 1 AND partGenus = 0
+	ORDER BY
+		name
+	LIMIT 50
+)
+JOIN word w ON (nameZeroPartGenus=w.name AND idWordZeroPartGenus != w.idWord)
+JOIN wordCategory wc ON (wc.idWord=idWordNonZero OR wc.idWord=idWordZeroPartGenus);
+
+SELECT
+	cw.idCategory,
+	cw.idWord,
+	idWordZeroPartGenus,
+	w.idWord AS idWordNonZero
+FROM (
+	SELECT
+		idWord AS idWordZeroPartGenus,
+		name AS nameZeroPartGenus
+	FROM
+		word
+	GROUP BY
+		name
+	HAVING
+		count(*) > 1 AND partGenus = 0
+	ORDER BY
+		name
+	LIMIT 50
+)
+JOIN word w ON (nameZeroPartGenus=w.name AND idWordZeroPartGenus != w.idWord)
+JOIN categoryWord cw ON (cw.idWord=idWordNonZero OR cw.idWord=idWordZeroPartGenus);
+
+
+    internal enum PartGenus : byte
+    {
+        NoValue = 0,
+        NounFeminine,1
+        NounMasculine,2
+        NounNeuter,3
+        Noun,4
+        Verb,5
+        Adjective,6
+        Adverb,7
+        Abbreviation,8
+        Preposition,9
+        Pronoun,10
+        Interjection,11
+        Joinder,12
+        Numeral 13
+    }
+
+--- Trim spaces
+UPDATE word SET name = LTRIM(name);
+UPDATE word SET name = RTRIM(name);
+-- Trim tabs
+UPDATE word SET name = LTRIM(name, CHAR(9));
+UPDATE word SET name = RTRIM(name, CHAR(9));
+	
+-- Replace part of a string
+UPDATE word SET name = REPLACE(name, '<span STYLE="color:black">', '') WHERE name LIKE '%<span STYLE%'
+
+SELECT
+	idWord
+FROM word
+WHERE idWord IN
+(
+	SELECT 
+		cw.idWord AS translatedId
+	FROM word w
+		JOIN wordCategory wc ON w.idWord=wc.idWord
+		JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+		JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName
+	WHERE w.name IN (
+					SELECT name FROM mat.filter
+				)
+);
+
+-- Print all translates
+SELECT
+	toTranslateWordName,
+	translatedCategoryName,
+	translatedId,
+	w.Name,
+	w.partGenus,
+	w.plural,
+	translatedDefinition,
+	translatedDescription
+FROM 
+(
+	SELECT 
+		w.name AS toTranslateWordName,
+		cw.idWord AS translatedId,
+		cw.definition AS translatedDefinition,
+		cw.description AS translatedDescription,
+		cn.name AS translatedCategoryName
+	FROM word w
+		JOIN wordCategory wc ON w.idWord=wc.idWord
+		JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+		JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName
+	WHERE w.name = 'mit Andacht verspeisen'
+)
+JOIN word w ON w.idWord=translatedId;
+
+SELECT toTranslateWordName,	translatedCategoryName,	w.Name,	w.partGenus, w.plural, translatedDefinition, translatedDescription FROM ( SELECT w.name AS toTranslateWordName, cw.idWord AS translatedId, cw.definition AS translatedDefinition, cw.description AS translatedDescription, cn.name AS translatedCategoryName FROM word w INDEXED BY wordNameIndexNoCase JOIN wordCategory wc ON w.idWord=wc.idWord JOIN categoryWord cw ON cw.idCategory=wc.idCategory JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName WHERE w.name LIKE 'änderung' ) JOIN word  w ON w.idWord=translatedId  
+
+SELECT name FROM word WHERE name >= 'änderung' AND name <  'änderunh'

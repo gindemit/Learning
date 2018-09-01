@@ -1,0 +1,197 @@
+ATTACH 'ru_de_dict.db' AS correct;
+
+-- Table for correct
+CREATE TABLE 
+	temp.testTranslateCorrect(
+		wordToTranslate VARCHAR(255),
+		categoryName VARCHAR(255),
+		translatedWord VARCHAR(255),
+		traslatedPartGenus INT,
+		translatedPlural VARCHAR(255)
+	);
+-- Delete
+DELETE FROM temp.testTranslateCorrect;	
+-- Insert to correct	
+INSERT INTO temp.testTranslateCorrect
+SELECT
+	toTranslateWordName,
+	translatedCategoryName,
+	w.Name,
+	w.partGenus,
+	w.plural
+FROM 
+(
+	SELECT 
+		w.name AS toTranslateWordName,
+		cw.idWord AS translatedId,
+		cw.definition AS translatedDefinition,
+		cw.description AS translatedDescription,
+		cn.name AS translatedCategoryName
+	FROM correct.word w
+		JOIN correct.wordCategory wc ON w.idWord=wc.idWord
+		JOIN correct.categoryWord cw ON cw.idCategory=wc.idCategory
+		JOIN correct.categoryName cn ON cn.idCategoryName=wc.idCategoryName
+)
+JOIN correct.word w ON w.idWord=translatedId;
+
+-- Table for new
+CREATE TABLE 
+	temp.testTranslateNew(
+		wordToTranslate VARCHAR(255),
+		categoryName VARCHAR(255),
+		translatedWord VARCHAR(255),
+		traslatedPartGenus INT,
+		translatedPlural VARCHAR(255)
+	);
+-- Delete
+DELETE FROM temp.testTranslateNew;
+-- Insert to new
+INSERT INTO temp.testTranslateNew
+SELECT
+	toTranslateWordName,
+	translatedCategoryName,
+	w.Name,
+	w.partGenus,
+	w.plural
+FROM 
+(
+	SELECT 
+		w.name AS toTranslateWordName,
+		cw.idWord AS translatedId,
+		cw.definition AS translatedDefinition,
+		cw.description AS translatedDescription,
+		cn.name AS translatedCategoryName
+	FROM word w
+		JOIN wordCategory wc ON w.idWord=wc.idWord
+		JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+		JOIN categoryName cn ON cn.idCategoryName=wc.idCategoryName
+)
+JOIN word w ON w.idWord=translatedId;
+
+sqlite> .mode csv
+sqlite> .output diff.csv
+
+-- Compare new and correct temp tables
+SELECT 
+	wordToTranslate,
+	categoryName,
+	translatedWord,
+	traslatedPartGenus,
+	translatedPlural
+FROM temp.testTranslateCorrect
+WHERE 
+	translatedWord
+NOT IN (
+	SELECT 
+		translatedWord
+	FROM temp.testTranslateNew
+);
+
+sqlite> .output stdout
+
+SELECT 
+	translatedWord
+FROM temp.testTranslateNew
+WHERE 
+	traslatedPartGenus
+NOT IN (
+	SELECT 
+		traslatedPartGenus
+	FROM temp.testTranslateCorrect
+);
+
+
+-- ########################
+-- Test that there is no wordIDs in wordCategory that not exist in word
+-- By success returns 1
+SELECT 
+(
+	SELECT
+		COUNT(*)
+	FROM
+		wordCategory
+	WHERE
+		idWord
+	IN
+	(
+		SELECT 
+			idWord
+		FROM
+			word
+	 )
+)
+=
+(
+	SELECT COUNT(*) FROM wordCategory
+);
+
+-- Test that there is no wordIDs in categoryWord that not exist in word
+-- By success returns 1
+SELECT 
+(
+	SELECT
+		COUNT(*)
+	FROM
+		categoryWord
+	WHERE
+		idWord
+	IN 
+	(
+		SELECT 
+			idWord
+		FROM
+			word
+	)
+)
+=
+(
+	SELECT COUNT(*) FROM categoryWord
+);
+
+-- Test that there is no wordIDs in word that not exist in categoryWord and wordCategory tables
+-- By success returns 1
+SELECT 
+(
+	SELECT
+		idWord,
+		name
+	FROM
+		word
+	WHERE
+		idWord
+	NOT IN 
+	(
+		SELECT 
+			idWord
+		FROM
+			categoryWord
+	)
+	ORDER BY idWord DESC
+	LIMIT 15;
+)
+=
+(
+	SELECT COUNT(*) FROM word
+);
+
+-- Select all word that reference self (cyclic dependency)
+-- Result should be empty
+SELECT
+	w.name,
+	w.idWord
+FROM
+	wordCategory wc
+JOIN
+	word w
+ON 
+	w.idWord=wc.idWord
+WHERE
+	wc.idWord
+IN (
+	SELECT
+		cw.idWord
+	FROM
+		categoryWord cw
+	WHERE
+		wc.idCategory=cw.idCategory
+);

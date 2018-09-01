@@ -1,0 +1,105 @@
+-- Update all idWord rows in wordCategory table where idWord is the id from duplicated word from word table
+-- Part one: put in another temporary table:
+CREATE TABLE temp.wordCategoryMigrate(idCategory INT, idWord INT, idWordZeroPartGenus INT, idWordNonZeroPartGenus INT);
+CREATE INDEX tempWCMidCategory ON wordCategoryMigrate(idCategory);
+
+INSERT INTO temp.wordCategoryMigrate(
+	idCategory,
+	idWord,
+	idWordZeroPartGenus,
+	idWordNonZeroPartGenus)
+SELECT
+	wc.idCategory AS idCategorySelected,
+	wc.idWord AS idWordSelected,
+	idWordZeroPartGenus AS idWordZeroPartGenusSelected,
+	w.idWord AS idWordNonZeroPartGenusSelected
+FROM (
+	SELECT
+		idWord AS idWordZeroPartGenus,
+		name AS nameZeroPartGenus
+	FROM
+		word
+	GROUP BY
+		name
+	HAVING
+		count(*) > 1 AND partGenus = 0
+	ORDER BY
+		name
+)
+JOIN word w ON (nameZeroPartGenus=w.name AND idWordZeroPartGenus != w.idWord)
+JOIN wordCategory wc ON (wc.idWord=idWordNonZeroPartGenusSelected OR wc.idWord=idWordZeroPartGenus);
+
+-- Part two: update the wordCategory table:
+UPDATE wordCategory
+SET idWord = (
+	SELECT
+		idWordNonZeroPartGenus
+	FROM
+		temp.wordCategoryMigrate
+	WHERE
+		temp.wordCategoryMigrate.idCategory=wordCategory.idCategory)
+WHERE
+	wordCategory.idWord = (
+	SELECT
+		idWordZeroPartGenus
+	FROM
+		temp.wordCategoryMigrate
+	WHERE
+		temp.wordCategoryMigrate.idCategory=wordCategory.idCategory);
+
+-- #################################################################################################### --
+-- Update all idWord rows in categoryWord table where idWord is the id from duplicated word from word table
+-- Part one: put in another temporary table:
+CREATE TABLE temp.categoryWordMigrate(idCategory INT, idWord INT, idWordZeroPartGenus INT, idWordNonZeroPartGenus);
+CREATE INDEX tempCWMidCategory ON categoryWordMigrate(idCategory);
+
+INSERT INTO temp.categoryWordMigrate(
+	idCategory,
+	idWord,
+	idWordZeroPartGenus,
+	idWordNonZeroPartGenus)
+SELECT
+	cw.idCategory AS idCategorySelected,
+	cw.idWord AS idWordSelected,
+	idWordZeroPartGenus AS idWordZeroPartGenusSelected,
+	w.idWord AS idWordNonZeroPartGenusSelected
+FROM (
+	SELECT
+		idWord AS idWordZeroPartGenus,
+		name AS nameZeroPartGenus
+	FROM
+		word
+	GROUP BY
+		name
+	HAVING
+		count(*) > 1 AND partGenus = 0
+	ORDER BY
+		name
+)
+JOIN word w ON (nameZeroPartGenus=w.name AND idWordZeroPartGenus != w.idWord)
+JOIN categoryWord cw ON (cw.idWord=idWordNonZeroPartGenusSelected OR cw.idWord=idWordZeroPartGenus);
+
+-- Part two: update the categoryWord table:
+UPDATE categoryWord
+SET idWord = (
+	SELECT
+		idWordNonZeroPartGenus
+	FROM
+		temp.categoryWordMigrate
+	WHERE
+		temp.categoryWordMigrate.idCategory=categoryWord.idCategory)
+WHERE
+	categoryWord.idWord = (
+	SELECT
+		idWordZeroPartGenus
+	FROM
+		temp.categoryWordMigrate
+	WHERE
+		temp.categoryWordMigrate.idCategory=categoryWord.idCategory);
+		
+		
+-- Compare tables
+SELECT count(*)
+FROM temp.wordCategoryMigrate 
+WHERE idCategory Not IN 
+    (SELECT idCategory FROM temp.categoryWordMigrate);

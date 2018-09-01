@@ -1,0 +1,182 @@
+-- Print all word id translated from translated word.
+SELECT
+	cw.idWord AS translateWordId
+FROM word w
+INNER JOIN wordCategory wc ON wc.idWord=w.idWord
+INNER JOIN wordCategory wwc ON wwc.idWord=cw.idWord
+JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+JOIN categoryWord cww ON (wwc.idCategory=cww.idCategory AND cww.idWord=wc.idWord)
+WHERE
+	w.idWord=18097;
+	
+--- Create table for store all path from word->translate->translateOf(translate)
+-- INNER JOIN
+ATTACH DATABASE 'notr.db' AS notr;
+CREATE TABLE notr.translatePath(toTranslateId, idCategoryTo, translatedId, idCategoryBack, traslatedIdBack);
+CREATE INDEX notr.tempTPtoTranslateId ON translatePath(toTranslateId);
+	
+INSERT INTO notr.translatePath
+SELECT
+	wc.idWord AS toTranslateWordId,
+	wc.idCategory,
+	cw.idWord AS translateWordId,
+	wwc.idCategory,
+	cww.idWord AS translatedBackWordId
+FROM
+	word w
+INNER JOIN wordCategory wc ON w.idWord=wc.idWord
+INNER JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+INNER JOIN wordCategory wwc ON cw.idWord=wwc.idWord
+INNER JOIN categoryWord cww ON wwc.idCategory=cww.idCategory;
+
+-- LEFT JOIN
+ATTACH DATABASE 'notr1.db' AS notr1;
+CREATE TABLE notr1.translatePath(toTranslateId, idCategoryTo, translatedId, idCategoryBack, traslatedIdBack);
+CREATE INDEX notr1.tempTPtoTranslateId ON translatePath(toTranslateId);
+	
+INSERT INTO notr1.translatePath
+SELECT
+	wc.idWord AS toTranslateWordId,
+	wc.idCategory,
+	cw.idWord AS translateWordId,
+	wwc.idCategory,
+	cww.idWord AS translatedBackWordId
+FROM
+	word w
+LEFT JOIN wordCategory wc ON w.idWord=wc.idWord
+LEFT JOIN categoryWord cw ON cw.idCategory=wc.idCategory
+LEFT JOIN wordCategory wwc ON cw.idWord=wwc.idWord
+LEFT JOIN categoryWord cww ON wwc.idCategory=cww.idCategory;
+
+SELECT
+	w.name,
+	toTranslateId,
+	idCategoryTo,
+	ww.name,
+	translatedId,
+	idCategoryBack,
+	www.name,
+	traslatedIdBack
+FROM
+	notr.translatePath
+JOIN word w ON toTranslateId=w.idWord
+JOIN word ww ON translatedId=ww.idWord
+JOIN word www ON traslatedIdBack=www.idWord
+LIMIT 500;
+
+
+-- Print example
+SELECT
+	w.name, toTranslateId, idCategoryTo, ww.name, translatedId, idCategoryBack, www.name, traslatedIdBack
+FROM
+	notr.translatePath
+JOIN word w ON w.idWord=toTranslateId
+JOIN word ww ON ww.idWord=translatedId
+JOIN word www ON www.idWord=traslatedIdBack
+WHERE
+	traslatedIdBack
+NOT IN (
+	SELECT
+		toTranslateId
+	FROM
+		notr.translatePath
+)
+LIMIT 30;
+
+-- Create table for all entries that have no return path. We can come to traslatedIdBack, but there is no translation for that word
+CREATE TABLE notr.deadEnd(toTranslateId, idCategoryTo, translatedId, idCategoryBack, traslatedIdBack);
+
+INSERT INTO notr.deadEnd
+SELECT
+	toTranslateId, idCategoryTo, translatedId, idCategoryBack, traslatedIdBack
+FROM
+	notr.translatePath
+WHERE
+	traslatedIdBack
+NOT IN (
+	SELECT
+		toTranslateId
+	FROM
+		notr.translatePath
+);
+
+SELECT COUNT(*) FROM notr.deadEnd;
+
+SELECT
+	toTranslateId, idCategoryTo, translatedId, idCategoryBack, traslatedIdBack, wc.idCategoryName
+FROM
+	notr.deadEnd de
+JOIN wordCategory wc ON wc.idCategory=de.idCategoryBack
+LIMIT 10;
+
+CREATE TABLE notr.deadEndFiltered(toTranslateId, idCategoryTo, translatedId, idCategoryBack, traslatedIdBack);
+
+SELECT
+	COUNT(*)
+FROM
+	categoryWord
+WHERE
+	idWord
+IN (
+	SELECT DISTINCT
+		traslatedIdBack
+	FROM
+		notr.deadEnd
+);
+
+SELECT
+	*
+FROM
+	notr.deadEnd
+LIMIT 30;
+
+
+SELECT
+	COUNT(*)
+FROM 
+	categoryWord
+WHERE
+	idCategory
+IN
+(
+	SELECT DISTINCT
+		idCategory
+	FROM 
+		wordCategory
+	WHERE
+		idWord
+	IN (
+		SELECT DISTINCT
+			traslatedIdBack
+		FROM
+			notr.deadEnd
+		)
+	);
+		
+
+INSERT INTO wordCategory(idWord, idCategoryName)
+SELECT
+	traslatedIdBack,
+	wc.idCategoryName
+FROM
+	notr.deadEnd de
+JOIN wordCategory wc ON wc.idCategory=de.idCategoryBack;
+
+INSERT OR IGNORE INTO categoryWord(idWord, idCategory, definition, description)
+SELECT
+	traslatedIdBack,
+	cw.idCategory,
+	cw.definition,
+	cw.description
+FROM
+	notr.deadEnd de
+JOIN categoryWord cw ON cw.idCategory=de.idCategoryBack
+JOIN wordCategory wc ON wc.idCategory=de.idCategoryBack;
+
+	
+
+	
+	
+	
+	
+	

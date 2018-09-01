@@ -1,0 +1,5 @@
+
+DELETE FROM
+	categoryWord
+WHERE
+	idWord=(SELECT idWord FROM word W)

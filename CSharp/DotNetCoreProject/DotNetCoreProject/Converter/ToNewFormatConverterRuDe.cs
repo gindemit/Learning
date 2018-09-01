@@ -24,7 +24,7 @@ namespace DotNetCoreProject.Converter
             foreach (var oldWord in mOldDb.Words)
             {
                 var newWord = new New.Word();
-                newWord.Name = oldWord.Name;
+                newWord.Name = oldWord.Name.Trim();
                 PartGenus partGenus;
                 string plural;
                 ParseAndFillPartGenusAndPlural(oldWord.Id, oldWord.Part, out partGenus, out plural);
