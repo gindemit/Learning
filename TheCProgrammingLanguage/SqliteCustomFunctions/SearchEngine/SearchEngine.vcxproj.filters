@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{a0ae3d90-a88b-4250-9999-ff009434eeca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sqlite">
+      <UniqueIdentifier>{51562b60-4b39-48a9-b77f-d5a565984983}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nunicode">
+      <UniqueIdentifier>{78a604f8-fd3e-413b-a905-b0c486a1dff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nunicode\libnu">
+      <UniqueIdentifier>{ec6e88b6-be86-440b-a8e2-b823c3081076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nunicode\sqlite3">
+      <UniqueIdentifier>{2c6862b4-096f-4ac0-b0dd-59a021adc79b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Exception">
+      <UniqueIdentifier>{80d2351f-7445-4598-bf77-ba70796a19d3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\sqlite\sqlite3.c">
+      <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\cesu8.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\ducet.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\extra.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\strcoll.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\strings.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\tofold.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\tolower.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\tounaccent.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\toupper.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf8.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf16.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf16be.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf16he.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf16le.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf32.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf32be.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf32he.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\utf32le.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\validate.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\libnu\version.c">
+      <Filter>nunicode\libnu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nunicode\sqlite3\nusqlite3.c">
+      <Filter>nunicode\sqlite3</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\search_engine.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\SearchEngine.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\QueryExecutor.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\sqlite\sqlite3.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\casemap.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\casemap_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\cesu8.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\cesu8_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\config.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\defines.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\ducet.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\extra.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\libnu.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\mph.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\strcoll.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\strcoll_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\strings.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\udb.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\unaccent.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf8.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf8_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf16.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf16_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf16be.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf16he.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf16le.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf32.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf32_internal.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf32be.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf32he.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\utf32le.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\validate.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\libnu\version.h">
+      <Filter>nunicode\libnu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\sqlite3\nusqlite3.h">
+      <Filter>nunicode\sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nunicode\sqlite3\version.h">
+      <Filter>nunicode\sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sqlite\sqlite3ext.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\search_engine.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\SearchEngine.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Exception\InvalidDbPathException.h">
+      <Filter>core\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Exception\SearchEngineExceptionBase.h">
+      <Filter>core\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Exception\OpenDbException.h">
+      <Filter>core\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\QueryExecutor.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Exception\QueryExecException.h">
+      <Filter>core\Exception</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

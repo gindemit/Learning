@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\core\Exception\InvalidDbPathException.h" />
+    <ClInclude Include="src\core\Exception\OpenDbException.h" />
+    <ClInclude Include="src\core\Exception\QueryExecException.h" />
+    <ClInclude Include="src\core\Exception\SearchEngineExceptionBase.h" />
+    <ClInclude Include="src\core\QueryExecutor.h" />
+    <ClInclude Include="src\core\SearchEngine.h" />
+    <ClInclude Include="src\core\search_engine.h" />
+    <ClInclude Include="src\nunicode\libnu\casemap.h" />
+    <ClInclude Include="src\nunicode\libnu\casemap_internal.h" />
+    <ClInclude Include="src\nunicode\libnu\cesu8.h" />
+    <ClInclude Include="src\nunicode\libnu\cesu8_internal.h" />
+    <ClInclude Include="src\nunicode\libnu\config.h" />
+    <ClInclude Include="src\nunicode\libnu\defines.h" />
+    <ClInclude Include="src\nunicode\libnu\ducet.h" />
+    <ClInclude Include="src\nunicode\libnu\extra.h" />
+    <ClInclude Include="src\nunicode\libnu\libnu.h" />
+    <ClInclude Include="src\nunicode\libnu\mph.h" />
+    <ClInclude Include="src\nunicode\libnu\strcoll.h" />
+    <ClInclude Include="src\nunicode\libnu\strcoll_internal.h" />
+    <ClInclude Include="src\nunicode\libnu\strings.h" />
+    <ClInclude Include="src\nunicode\libnu\udb.h" />
+    <ClInclude Include="src\nunicode\libnu\unaccent.h" />
+    <ClInclude Include="src\nunicode\libnu\utf16.h" />
+    <ClInclude Include="src\nunicode\libnu\utf16be.h" />
+    <ClInclude Include="src\nunicode\libnu\utf16he.h" />
+    <ClInclude Include="src\nunicode\libnu\utf16le.h" />
+    <ClInclude Include="src\nunicode\libnu\utf16_internal.h" />
+    <ClInclude Include="src\nunicode\libnu\utf32.h" />
+    <ClInclude Include="src\nunicode\libnu\utf32be.h" />
+    <ClInclude Include="src\nunicode\libnu\utf32he.h" />
+    <ClInclude Include="src\nunicode\libnu\utf32le.h" />
+    <ClInclude Include="src\nunicode\libnu\utf32_internal.h" />
+    <ClInclude Include="src\nunicode\libnu\utf8.h" />
+    <ClInclude Include="src\nunicode\libnu\utf8_internal.h" />
+    <ClInclude Include="src\nunicode\libnu\validate.h" />
+    <ClInclude Include="src\nunicode\libnu\version.h" />
+    <ClInclude Include="src\nunicode\sqlite3\nusqlite3.h" />
+    <ClInclude Include="src\nunicode\sqlite3\version.h" />
+    <ClInclude Include="src\sqlite\sqlite3.h" />
+    <ClInclude Include="src\sqlite\sqlite3ext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\QueryExecutor.cpp" />
+    <ClCompile Include="src\core\SearchEngine.cpp" />
+    <ClCompile Include="src\core\search_engine.cpp" />
+    <ClCompile Include="src\nunicode\libnu\cesu8.c" />
+    <ClCompile Include="src\nunicode\libnu\ducet.c" />
+    <ClCompile Include="src\nunicode\libnu\extra.c" />
+    <ClCompile Include="src\nunicode\libnu\strcoll.c" />
+    <ClCompile Include="src\nunicode\libnu\strings.c" />
+    <ClCompile Include="src\nunicode\libnu\tofold.c" />
+    <ClCompile Include="src\nunicode\libnu\tolower.c" />
+    <ClCompile Include="src\nunicode\libnu\tounaccent.c" />
+    <ClCompile Include="src\nunicode\libnu\toupper.c" />
+    <ClCompile Include="src\nunicode\libnu\utf16.c" />
+    <ClCompile Include="src\nunicode\libnu\utf16be.c" />
+    <ClCompile Include="src\nunicode\libnu\utf16he.c" />
+    <ClCompile Include="src\nunicode\libnu\utf16le.c" />
+    <ClCompile Include="src\nunicode\libnu\utf32.c" />
+    <ClCompile Include="src\nunicode\libnu\utf32be.c" />
+    <ClCompile Include="src\nunicode\libnu\utf32he.c" />
+    <ClCompile Include="src\nunicode\libnu\utf32le.c" />
+    <ClCompile Include="src\nunicode\libnu\utf8.c" />
+    <ClCompile Include="src\nunicode\libnu\validate.c" />
+    <ClCompile Include="src\nunicode\libnu\version.c" />
+    <ClCompile Include="src\nunicode\sqlite3\nusqlite3.c" />
+    <ClCompile Include="src\sqlite\sqlite3.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{66758D5D-0125-45FB-A5F9-55FF26EF9900}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SearchEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);NU_WITH_EVERYTHING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\core;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\sqlite;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\nunicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);NU_WITH_EVERYTHING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\core;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\sqlite;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\nunicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);NU_WITH_EVERYTHING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\core;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\sqlite;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\nunicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);NU_WITH_EVERYTHING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\core;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\sqlite;C:\Work\git\Learning\TheCProgrammingLanguage\SqliteCustomFunctions\SearchEngine\src\nunicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
