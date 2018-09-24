@@ -3,6 +3,7 @@
 	margin-bottom: 15;
 	margin-left: 15;
 	margin-right: 15;
+	background-color : rgba(200, 200, 256, 0.1);
 }
 
 .workSpaceClass {
@@ -12,9 +13,7 @@
 }
 
 .node {
-	font-size : 100;
-	/*font : resource("Verdana");*/
-	text-color : rgb(256, 0, 0);
+	background-color : rgba(0, 0, 110, 0.5);
 }
 
 .title {
@@ -65,6 +64,13 @@
 	border-color : rgba(0, 220, 0, 0.7);/*not working*/
 	background-color : rgba(0, 0, 220, 0.6);
 	visibility : visible;
+}
+
+.flexDirectionRow {
+	flex-direction : row;
+}
+.flexDirectionColumn {
+	flex-direction : column;
 }
 
 .wrap {

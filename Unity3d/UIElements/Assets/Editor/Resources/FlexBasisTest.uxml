@@ -11,7 +11,7 @@
                         UnityEditor.PackageManager.UI ../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-	<engine:VisualElement class="rootClass">
+	<engine:VisualElement class="node">
 		<engine:VisualElement class="wrap">
 			<engine:VisualElement name="Box0" class="flexBasisGrowShrink"/>
 			<engine:VisualElement name="Box1" class="flexBasisGrowShrink"/>
